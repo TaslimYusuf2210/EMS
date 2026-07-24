@@ -1,5 +1,5 @@
 import { request } from '../api';
-import type { SalarySummary, EmployeeCountResponse } from '../../types/dashboard/report';
+import type { SalarySummary, EmployeeCountResponse, HiringTrendResponse } from '../../types/dashboard/report';
 
 export const getSalarySummary = () =>
   request<SalarySummary>('/reports/salary-summary', {
@@ -8,5 +8,10 @@ export const getSalarySummary = () =>
 
 export const getEmployeeCount = () =>
   request<EmployeeCountResponse>('/departments/employee-count', {
+    method: 'GET',
+  });
+
+export const getReportsHiringTrend = () =>
+  request<HiringTrendResponse>('/reports/hiring-trend', {
     method: 'GET',
   });

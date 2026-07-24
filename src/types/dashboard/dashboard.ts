@@ -1,15 +1,10 @@
 // ─── Dashboard Page Types ────────────────────────────────────────────
 
-export interface DepartmentStats {
-  department: string;
-  count: number;
-  percentage: number;
-}
-
 export interface StatusDistribution {
   active: number;
   inactive: number;
   probation: number;
+  onLeave: number;
   resigned: number;
   terminated: number;
 }
@@ -28,9 +23,19 @@ export interface RecentEmployee {
   photoUrl: string | null;
 }
 
-export interface GrowthTrend {
-  labels: string[];
-  data: number[];
+export interface DepartmentOverview {
+  id: string;
+  name: string;
+  abbreviation: string;
+  employeeCount: number;
+  head: string;
+}
+
+export interface RecentActivity {
+  id: string;
+  action: string;
+  timestamp: string;
+  type: 'note' | 'document' | 'department' | 'employee' | 'education' | 'salary';
 }
 
 export interface DashboardStats {
@@ -39,8 +44,8 @@ export interface DashboardStats {
   inactiveEmployees: number;
   totalDepartments: number;
   newEmployeesThisMonth: number;
-  employeesByDepartment: DepartmentStats[];
   statusDistribution: StatusDistribution;
   recentEmployees: RecentEmployee[];
-  growthTrend: GrowthTrend;
+  departmentOverview: DepartmentOverview[];
+  recentActivity: RecentActivity[];
 }

@@ -68,7 +68,7 @@ function DepartmentBreakdown({ data, isLoading, isError }: DepartmentBreakdownPr
             <XAxis type="number" tick={{ fontSize: 10 }} />
             <YAxis type="category" dataKey="department" width={120} tick={{ fontSize: 10 }} />
             <Tooltip formatter={(value: any) => value} />
-            <Bar dataKey="employeeCount" fill="#ccd5ae" radius={[0, 4, 4, 0]} />
+            <Bar dataKey="employeeCount" fill="#ccd5ae" radius={[0, 4, 4, 0]} minPointSize={2} />
           </BarChart>
         </ResponsiveContainer>
       )}

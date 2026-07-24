@@ -20,3 +20,8 @@ export interface DepartmentEmployeeCount {
 export interface EmployeeCountResponse {
   departments: DepartmentEmployeeCount[];
 }
+
+export interface HiringTrendResponse {
+  labels: string[];
+  data: number[];
+}

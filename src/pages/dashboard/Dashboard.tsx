@@ -1,26 +1,22 @@
-import { useApp } from '../../context/AppContext';
 import { Link } from 'react-router-dom';
 import { PageHeader } from '../../components/PageHeader';
 import { StatCard } from '../../components/StatCard';
 import { Avatar } from '../../components/ui/avatar';
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from '../../components/ui/table';
 import { useGetDashboardStats } from '../../hooks/useQuery/useGetDashboardStats';
+import { RecentActivityTimeline } from './components/RecentActivityTimeline';
+import { QuickActions } from './components/QuickActions';
+import { DepartmentCards } from './components/DepartmentCards';
 import type { RecentEmployee } from '../../types/dashboard/dashboard';
 
 export default function Dashboard() {
-  const { employees, departments } = useApp();
-
-  const { data: dashboardStats, isError } = useGetDashboardStats();
-
-  console.log('[Dashboard] dashboardStats (API):', dashboardStats);
-  console.log('[Dashboard] employees (useApp):', employees);
-  console.log('[Dashboard] departments (useApp):', departments);
-  console.log('[Dashboard] employeesByDepartment from API:', dashboardStats?.data?.employeesByDepartment);
-  console.log('[Dashboard] statusDistribution from API:', dashboardStats?.data?.statusDistribution);
-  console.log('[Dashboard] growthTrend from API:', dashboardStats?.data?.growthTrend);
-  const totalEmployees = dashboardStats?.data?.totalEmployees ?? 0;
-  const activeEmployees = dashboardStats?.data?.activeEmployees ?? 0;
-  const recentEmployees = dashboardStats?.data?.recentEmployees ?? [];
+  const { data: dashboardStats, isError, isLoading } = useGetDashboardStats();
+  const stats = dashboardStats?.data;
+  const totalEmployees = stats?.totalEmployees ?? 0;
+  const activeEmployees = stats?.activeEmployees ?? 0;
+  const recentEmployees = stats?.recentEmployees ?? [];
+  const departments = stats?.departmentOverview ?? [];
+  const recentActivity = stats?.recentActivity ?? [];
 
   return (
     <div className="space-y-6">
@@ -29,110 +25,127 @@ export default function Dashboard() {
 
       {/* STATISTICS CARDS */}
       <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-        <StatCard label="Total Employees" value={isError ? '--' : dashboardStats?.data?.totalEmployees} footer={isError ? 'Unable to Load' : 'Total database count'} />
-        <StatCard label="Active Employees" value={isError ? '--' : dashboardStats?.data?.activeEmployees} footer={isError ? 'Unable to Load' : '● Currently active'} footerClassName={isError ? '' : 'text-green-600 font-semibold'} />
-        <StatCard label="Inactive Employees" value={isError ? '--' : dashboardStats?.data?.inactiveEmployees} footer={isError ? 'Unable to Load' : 'Excluding active / probation'} />
-        <StatCard label="Total Departments" value={isError ? '--' : dashboardStats?.data?.totalDepartments} footer={isError ? 'Unable to Load' : 'Registered segments'} />
-        <StatCard label="New This Month" value={isError ? '--' : dashboardStats?.data?.newEmployeesThisMonth} footer={isError ? 'Unable to Load' : 'Hired in current month'} />
+        {isLoading ? (
+          Array.from({ length: 5 }).map((_, i) => (
+            <div key={i} className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm animate-pulse">
+              <div className="h-3 bg-neutral-100 rounded w-24 mb-3" />
+              <div className="h-8 bg-neutral-100 rounded w-16" />
+            </div>
+          ))
+        ) : (
+          <>
+            <StatCard label="Total Employees" value={isError ? '--' : stats?.totalEmployees} footer={isError ? 'Unable to Load' : 'Total database count'} />
+            <StatCard label="Active Employees" value={isError ? '--' : stats?.activeEmployees} footer={isError ? 'Unable to Load' : '● Currently active'} footerClassName={isError ? '' : 'text-green-600 font-semibold'} />
+            <StatCard label="Inactive Employees" value={isError ? '--' : stats?.inactiveEmployees} footer={isError ? 'Unable to Load' : 'Excluding active / probation'} />
+            <StatCard label="Total Departments" value={isError ? '--' : stats?.totalDepartments} footer={isError ? 'Unable to Load' : 'Registered segments'} />
+            <StatCard label="New This Month" value={isError ? '--' : stats?.newEmployeesThisMonth} footer={isError ? 'Unable to Load' : 'Hired in current month'} />
+          </>
+        )}
       </section>
 
+      <QuickActions />
+
       {/* CHARTS GRAPHICS PANEL */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-
-        {/* Chart 1: Employees by Department */}
-        <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm flex flex-col justify-between">
-          <div>
-            <h3 className="font-bold text-sm text-neutral-900 mb-4">Employees by Department</h3>
-            {isError ? (
-              <div className="h-44 flex items-center justify-center text-neutral-400 text-sm">Failed to load data</div>
-            ) : (
-              <div className="h-44 flex items-end justify-between gap-4 mt-6">
-                {departments.map((dep) => {
-                  const count = employees.filter((e) => e.department === dep.name).length;
-                  const percentage = 1 > 0 ? (count / 0) * 100 : 0;
-                  return (
-                    <div key={dep.id} className="flex-1 flex flex-col items-center gap-2">
-                      <div className="w-full bg-neutral-100 rounded-t-md h-32 flex items-end">
-                        <div
-                          style={{ height: `${Math.max(percentage, 5)}%` }}
-                          className="w-full bg-[#ccd5ae] rounded-t-md transition-all duration-500"
-                        />
-                      </div>
-                      <span className="text-[9px] font-bold text-neutral-400 truncate w-full text-center">
-                        {dep.name}
-                      </span>
-                      <span className="text-[10px] font-extrabold text-neutral-900">{count}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
+      {isLoading ? (
+        <section className="space-y-6">
+          <div className="bg-white border border-neutral-200 rounded-2xl p-8 shadow-sm animate-pulse">
+            <div className="h-4 bg-neutral-100 rounded w-48 mb-8" />
+            <div className="flex items-center justify-center">
+              <div className="w-40 h-40 bg-neutral-100 rounded-full" />
+            </div>
           </div>
-        </div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm animate-pulse">
+              <div className="h-4 bg-neutral-100 rounded w-40 mb-4" />
+              <div className="space-y-3">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="h-16 bg-neutral-100 rounded-xl" />
+                ))}
+              </div>
+            </div>
+            <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm animate-pulse">
+              <div className="h-4 bg-neutral-100 rounded w-32 mb-4" />
+              <div className="space-y-4">
+                {[1, 2, 3].map((i) => (
+                  <div key={i} className="flex gap-3">
+                    <div className="w-5 h-5 bg-neutral-100 rounded-full shrink-0" />
+                    <div className="flex-1 space-y-2">
+                      <div className="h-3 bg-neutral-100 rounded w-full" />
+                      <div className="h-2 bg-neutral-100 rounded w-16" />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section className="space-y-6">
 
-        {/* Chart 2: Status Distribution */}
-        <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm">
+        {/* Employment Status Distribution */}
+        <div className="bg-white border border-neutral-200 rounded-2xl p-8 shadow-sm">
           <h3 className="font-bold text-sm text-neutral-900 mb-4">Employment Status Distribution</h3>
           {isError ? (
-            <div className="flex items-center justify-center h-44 text-neutral-400 text-sm">Failed to load data</div>
+            <div className="flex items-center justify-center h-56 text-neutral-400 text-sm">Failed to load data</div>
           ) : (
             <>
-              <div className="flex items-center justify-center h-44 mt-6 relative">
-                <svg className="w-32 h-32 transform -rotate-90">
-                  <circle cx="64" cy="64" r="50" fill="transparent" stroke="#f3f4f6" strokeWidth="16" />
+              <div className="flex items-center justify-center h-56 mt-6 relative">
+                <svg className="w-40 h-40 transform -rotate-90">
+                  <circle cx="80" cy="80" r="64" fill="transparent" stroke="#f3f4f6" strokeWidth="20" />
                   <circle
-                    cx="64"
-                    cy="64"
-                    r="50"
+                    cx="80"
+                    cy="80"
+                    r="64"
                     fill="transparent"
                     stroke="#0a0a0a"
-                    strokeWidth="16"
-                    strokeDasharray={`${(4 / 2) * 314} 314`}
+                    strokeWidth="20"
+                    strokeDasharray={`${(activeEmployees / Math.max(totalEmployees, 1)) * 402} 402`}
                   />
                 </svg>
                 <div className="absolute flex flex-col items-center">
-                  <span className="text-2xl font-black text-neutral-950">
+                  <span className="text-3xl font-black text-neutral-950">
                     {totalEmployees > 0 ? Math.round((activeEmployees / totalEmployees) * 100) : 0}%
                   </span>
                   <span className="text-[9px] font-bold text-neutral-400 uppercase mt-0.5">Active Status</span>
                 </div>
               </div>
-              <div className="flex justify-center gap-4 text-[10px] font-bold text-neutral-500 mt-4">
+              <div className="flex justify-center gap-6 text-[11px] font-bold text-neutral-500 mt-4">
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 bg-[#ccd5ae] rounded-sm" /> Active
+                  <span className="w-3 h-3 bg-[#ccd5ae] rounded-sm" /> Active: {activeEmployees}
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="w-2.5 h-2.5 bg-neutral-200 rounded-sm" /> Other statuses
+                  <span className="w-3 h-3 bg-neutral-200 rounded-sm" /> Other: {totalEmployees - activeEmployees}
                 </span>
               </div>
             </>
           )}
         </div>
 
-        {/* Chart 3: Employee Growth Trend */}
-        <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm">
-          <h3 className="font-bold text-sm text-neutral-900 mb-4">Employee Growth Trend</h3>
-          {isError ? (
-            <div className="h-44 flex items-center justify-center text-neutral-400 text-sm">Failed to load data</div>
-          ) : (
-            <div className="h-44 mt-6 relative">
-              <svg className="w-full h-32" viewBox="0 0 100 30" preserveAspectRatio="none">
-                <path d="M0,30 Q25,24 50,16 T100,5 L100,30 L0,30 Z" fill="#f5f5f5" />
-                <path d="M0,30 Q25,24 50,16 T100,5" fill="none" stroke="#171717" strokeWidth="1.5" />
-              </svg>
-              <div className="flex justify-between text-[9px] font-bold text-neutral-400 px-1 mt-2">
-                <span>Q1</span>
-                <span>Q2</span>
-                <span>Q3</span>
-                <span>Q4</span>
-              </div>
-            </div>
-          )}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <DepartmentCards departments={departments} />
+          <RecentActivityTimeline activities={recentActivity} />
         </div>
       </section>
+      )}
 
       {/* RECENT EMPLOYEES LIST TABLE */}
-      <section className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm">
+      {isLoading ? (
+        <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm animate-pulse">
+          <div className="h-5 bg-neutral-100 rounded w-40 mb-6" />
+          <div className="space-y-3">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex items-center gap-4">
+                <div className="w-8 h-8 bg-neutral-100 rounded-full shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-3 bg-neutral-100 rounded w-32" />
+                  <div className="h-2 bg-neutral-100 rounded w-48" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <section className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm">
         <div className="flex items-center justify-between mb-6">
           <div>
             <h3 className="font-bold text-base text-neutral-900">Recent Employees</h3>
@@ -184,6 +197,7 @@ export default function Dashboard() {
           </Table>
         )}
       </section>
+      )}
     </div>
   );
 }
