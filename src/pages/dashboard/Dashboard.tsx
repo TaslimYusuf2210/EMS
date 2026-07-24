@@ -16,7 +16,8 @@ export default function Dashboard() {
   const activeEmployees = stats?.activeEmployees ?? 0;
   const recentEmployees = stats?.recentEmployees ?? [];
   const departments = stats?.departmentOverview ?? [];
-  const recentActivity = (stats?.recentActivity ?? []).slice(0, 6);
+  const recentActivity = stats?.recentActivity ?? [];
+  console.log('[Dashboard] recentActivity:', recentActivity);
 
   return (
     <div className="space-y-6">

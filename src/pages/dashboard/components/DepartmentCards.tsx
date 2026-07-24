@@ -11,7 +11,7 @@ export function DepartmentCards({ departments }: DepartmentCardsProps) {
       {departments.length === 0 ? (
         <div className="text-center text-neutral-400 text-xs py-4">No departments yet.</div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-80 overflow-y-auto pr-2">
           {departments.map((dep) => {
             const count = dep.employeeCount;
             return (

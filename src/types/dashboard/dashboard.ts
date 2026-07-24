@@ -35,7 +35,7 @@ export interface RecentActivity {
   id: string;
   action: string;
   timestamp: string;
-  type: 'note' | 'document' | 'department' | 'employee' | 'education' | 'salary';
+  type: 'note' | 'document' | 'department' | 'department_edit' | 'employee' | 'employee_delete' | 'education' | 'salary';
 }
 
 export interface DashboardStats {
