@@ -125,7 +125,7 @@ export default function Dashboard() {
                       <Cell key={entry.name} fill={STATUS_COLORS[entry.name] ?? '#e5e5e5'} />
                     ))}
                   </Pie>
-                  <Tooltip formatter={(value: any, name: string) => [value, name.charAt(0).toUpperCase() + name.slice(1)]} />
+                  <Tooltip formatter={(value: any, name: any) => [value, String(name).charAt(0).toUpperCase() + String(name).slice(1)]} />
                 </PieChart>
               </ResponsiveContainer>
               <div className="flex flex-col gap-2 text-[11px] font-bold text-neutral-500 shrink-0">

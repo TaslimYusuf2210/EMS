@@ -15,3 +15,9 @@ export const getReportsHiringTrend = () =>
   request<HiringTrendResponse>('/reports/hiring-trend', {
     method: 'GET',
   });
+
+export const exportReport = (format: 'csv' | 'pdf' = 'csv') =>
+  request<any>('/reports/export', {
+    method: 'GET',
+    params: { format },
+  });
