@@ -7,17 +7,33 @@ import { useGetDashboardStats } from '../../hooks/useQuery/useGetDashboardStats'
 import { RecentActivityTimeline } from './components/RecentActivityTimeline';
 import { QuickActions } from './components/QuickActions';
 import { DepartmentCards } from './components/DepartmentCards';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Label } from 'recharts';
 import type { RecentEmployee } from '../../types/dashboard/dashboard';
+
+const STATUS_COLORS: Record<string, string> = {
+  active: '#ccd5ae',
+  probation: '#faedcd',
+  onLeave: '#84a05a',
+  inactive: '#d4d4d4',
+  resigned: '#f5f5f5',
+  terminated: '#a3a3a3',
+};
 
 export default function Dashboard() {
   const { data: dashboardStats, isError, isLoading } = useGetDashboardStats();
   const stats = dashboardStats?.data;
-  const totalEmployees = stats?.totalEmployees ?? 0;
-  const activeEmployees = stats?.activeEmployees ?? 0;
   const recentEmployees = stats?.recentEmployees ?? [];
   const departments = stats?.departmentOverview ?? [];
   const recentActivity = stats?.recentActivity ?? [];
   console.log('[Dashboard] recentActivity:', recentActivity);
+  const statusDist = stats?.statusDistribution;
+
+  const pieData = statusDist
+    ? Object.entries(statusDist).map(([name, value]) => ({ name, value }))
+    : [];
+  const pieTotal = pieData.reduce((sum, d) => sum + d.value, 0);
+  console.log('[Dashboard] statusDistribution:', statusDist);
+  console.log('[Dashboard] pieData:', pieData);
 
   return (
     <div className="space-y-6">
@@ -89,36 +105,38 @@ export default function Dashboard() {
           {isError ? (
             <div className="flex items-center justify-center h-56 text-neutral-400 text-sm">Failed to load data</div>
           ) : (
-            <>
-              <div className="flex items-center justify-center h-56 mt-6 relative">
-                <svg className="w-40 h-40 transform -rotate-90">
-                  <circle cx="80" cy="80" r="64" fill="transparent" stroke="#f3f4f6" strokeWidth="20" />
-                  <circle
-                    cx="80"
-                    cy="80"
-                    r="64"
-                    fill="transparent"
-                    stroke="#0a0a0a"
-                    strokeWidth="20"
-                    strokeDasharray={`${(activeEmployees / Math.max(totalEmployees, 1)) * 402} 402`}
-                  />
-                </svg>
-                <div className="absolute flex flex-col items-center">
-                  <span className="text-3xl font-black text-neutral-950">
-                    {totalEmployees > 0 ? Math.round((activeEmployees / totalEmployees) * 100) : 0}%
+            <div className="flex items-center gap-8">
+              <ResponsiveContainer width="55%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    cx="50%"
+                    cy="50%"
+                    innerRadius={0}
+                    outerRadius={120}
+                    dataKey="value"
+                    stroke="none"
+                    label={({ name, value }) => {
+                      const pct = pieTotal > 0 ? Math.round((value / pieTotal) * 100) : 0;
+                      return pct > 0 ? `${pct}%` : '';
+                    }}
+                  >
+                    {pieData.map((entry) => (
+                      <Cell key={entry.name} fill={STATUS_COLORS[entry.name] ?? '#e5e5e5'} />
+                    ))}
+                  </Pie>
+                  <Tooltip formatter={(value: any, name: string) => [value, name.charAt(0).toUpperCase() + name.slice(1)]} />
+                </PieChart>
+              </ResponsiveContainer>
+              <div className="flex flex-col gap-2 text-[11px] font-bold text-neutral-500 shrink-0">
+                {pieData.map((entry) => (
+                  <span key={entry.name} className="flex items-center gap-2">
+                    <span className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: STATUS_COLORS[entry.name] }} />
+                    {entry.name.charAt(0).toUpperCase() + entry.name.slice(1)}: {entry.value}
                   </span>
-                  <span className="text-[9px] font-bold text-neutral-400 uppercase mt-0.5">Active Status</span>
-                </div>
+                ))}
               </div>
-              <div className="flex justify-center gap-6 text-[11px] font-bold text-neutral-500 mt-4">
-                <span className="flex items-center gap-1.5">
-                  <span className="w-3 h-3 bg-[#ccd5ae] rounded-sm" /> Active: {activeEmployees}
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <span className="w-3 h-3 bg-neutral-200 rounded-sm" /> Other: {totalEmployees - activeEmployees}
-                </span>
-              </div>
-            </>
+            </div>
           )}
         </div>
 
