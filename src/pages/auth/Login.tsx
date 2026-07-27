@@ -158,9 +158,9 @@ export default function Login() {
                   />
                   Remember me
                 </label>
-                <a href="#forgot" className="text-indigo-600 hover:text-indigo-700 font-semibold hover:underline">
+                <Link to="/forgot-password" className="text-indigo-600 hover:text-indigo-700 font-semibold hover:underline">
                   Forgot password?
-                </a>
+                </Link>
               </div>
 
               {/* Submit Button */}

@@ -1,5 +1,5 @@
 import { request } from './api';
-import type { CurrentUserResponse, LoginPayload, LoginResponse, RegisterPayload, RegisterResponse, SendOtpPayload, VerifyOtpPayload, ChangePasswordPayload } from '../types/auth';
+import type { CurrentUserResponse, LoginPayload, LoginResponse, RegisterPayload, RegisterResponse, SendOtpPayload, VerifyOtpPayload, ChangePasswordPayload, ResetPasswordPayload } from '../types/auth';
 
 export const registerAccount = (payload: RegisterPayload) =>
   request<RegisterResponse>('/auth/register', {
@@ -36,3 +36,16 @@ export const changePassword = (payload: ChangePasswordPayload) =>
     data: payload,
 });
 
+export type ForgotPasswordPayload = { email: string };
+
+export const forgotPassword = (payload: ForgotPasswordPayload) => 
+   request<{ message: string }>('/auth/forgot-password', {
+    method: 'POST',
+    data: payload,
+  });
+
+export const resetPassword = (payload: ResetPasswordPayload ) =>
+   request<any>('/auth/reset-password', {
+    method: 'POST',
+    data: payload,
+  });

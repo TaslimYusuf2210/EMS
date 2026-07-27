@@ -13,6 +13,8 @@ import EmployeeDetails from "./pages/employees/EmployeeDetails";
 import EmployeesList from "./pages/employees/EmployeesList";
 import Layout from "./components/Layout";
 import Login from "./pages/auth/Login";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 import Reports from "./pages/reports/Reports";
 import Settings from "./pages/settings/Settings";
 import "./App.css";
@@ -28,6 +30,8 @@ function App() {
         <Routes>
           {/* Auth routes (no sidebar) */}
           <Route path="/login" element={<Login />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/create-account" element={<CreateAccount />} />
 
           {/* App routes (with sidebar layout + auth protection) */}
