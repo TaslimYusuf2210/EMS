@@ -5,7 +5,6 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   if (!token) return <Navigate to="/login" replace />;
   return <>{children}</>;
 }
-import { AppProvider } from "./context/AppContext";
 import CreateAccount from "./pages/auth/CreateAccount";
 import Dashboard from "./pages/dashboard/Dashboard";
 import DepartmentDetails from "./pages/departments/DepartmentDetails";
@@ -24,8 +23,7 @@ const queryClient = new QueryClient();
 
 function App() {
   return (
-    <AppProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
         <BrowserRouter>
         <Routes>
           {/* Auth routes (no sidebar) */}
@@ -49,7 +47,6 @@ function App() {
         <Toaster />
       </BrowserRouter>
       </QueryClientProvider>
-    </AppProvider>
   );
 }
 

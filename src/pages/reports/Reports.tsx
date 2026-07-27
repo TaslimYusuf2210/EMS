@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { toast } from 'sonner';
-import { useApp } from '../../context/AppContext';
+import { useGetEmployees } from '../../hooks/useQuery/useGetEmployees';
+import { useGetDepartments } from '../../hooks/useQuery/useGetDepartments';
 import { EmployeeMetrics } from './components/EmployeeMetrics';
 import { SalaryMetrics } from './components/SalaryMetrics';
 import { HiringTrend } from './components/HiringTrend';
@@ -8,7 +9,10 @@ import { HiringTrend } from './components/HiringTrend';
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5000/api';
 
 export default function Reports() {
-  const { employees, departments } = useApp();
+  const { data: employeesData } = useGetEmployees({ limit: 100 });
+  const { data: departmentsData } = useGetDepartments();
+  const employees = employeesData?.employees ?? [];
+  const departments = departmentsData ?? [];
   const [exportingFormat, setExportingFormat] = useState<'csv' | 'pdf' | null>(null);
 
   const handleExport = async (format: 'csv' | 'pdf') => {

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useApp } from "../../context/AppContext";
 import type { Department } from "../../types/dashboard/department";
 import { useGetDepartments } from "../../hooks/useQuery/useGetDepartments";
 import { AddDepartmentDialog } from "./components/AddDepartmentDialog";
@@ -13,9 +12,6 @@ export default function DepartmentsList() {
   const navigate = useNavigate();
   const { data: departmentsData, isLoading: isDepartmentsLoading, isError: isDepartmentsError } = useGetDepartments();
   const departments = departmentsData ?? [];
-  console.log('[DepartmentsList] departmentsData:', departmentsData);
-  console.log('[DepartmentsList] departments array being rendered:', departments);
-  const { deleteDepartment } = useApp();
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [editingDep, setEditingDep] = useState<Department | null>(null);
   const [deletingDep, setDeletingDep] = useState<Department | null>(null);
