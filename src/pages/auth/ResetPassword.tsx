@@ -1,8 +1,8 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Link, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import workTimeSvg from '../../assets/work_time.svg';
 import { Hourglass } from 'ldrs/react'
 import 'ldrs/react/Hourglass.css'
@@ -22,6 +22,16 @@ type ResetFormValues = z.infer<typeof resetSchema>;
 
 export default function ResetPassword() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const emailFromState = (location.state as { email?: string })?.email ?? '';
+
+  useEffect(() => {
+    if (!emailFromState) {
+      navigate('/forgot-password', { replace: true });
+    }
+  }, [emailFromState, navigate]);
+
+  if (!emailFromState) return null;
   const [showPassword, setShowPassword] = useState(false);
   const { mutate: resetPassword, isPending, isSuccess } = useResetPassword();
 
@@ -31,7 +41,7 @@ export default function ResetPassword() {
     formState: { errors },
   } = useForm<ResetFormValues>({
     resolver: zodResolver(resetSchema),
-    defaultValues: { email: '', otp: '', newPassword: '', confirmPassword: '' },
+    defaultValues: { email: emailFromState, otp: '', newPassword: '', confirmPassword: '' },
   });
 
   const onSubmit = (data: ResetFormValues) => {
@@ -101,16 +111,14 @@ export default function ResetPassword() {
                 <input
                   type="email"
                   id="email"
+                  readOnly
                   placeholder=""
                   {...register('email')}
-                  className={`w-full py-3 px-4 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
-                    errors.email ? 'border-red-400 focus:border-red-500' : 'border-slate-200 focus:border-indigo-600'
-                  }`}
+                  className="w-full py-3 px-4 border-b-2 text-slate-500 bg-transparent cursor-not-allowed border-slate-100 focus:outline-none"
                 />
-                <label htmlFor="email" className="absolute left-4 -top-2.5 text-xs text-slate-500 transition-all duration-200">
+                <label htmlFor="email" className="absolute left-4 -top-2.5 text-xs text-slate-400 transition-all duration-200">
                   Email Address
                 </label>
-                {errors.email && <p className="text-red-500 text-xs mt-1 font-medium">{errors.email.message}</p>}
               </div>
 
               {/* OTP */}

@@ -6,7 +6,7 @@ export const useRegisterAccount = (options?: { onSuccess?: () => void }) => {
   return useMutation({
     mutationFn: registerAccount,
     onSuccess: () => {
-      toast.success('Account created successfully! Please check your email for verification.');
+      toast.success('Account created successfully!');
       options?.onSuccess?.();
     },
     onError: (error: any) => {

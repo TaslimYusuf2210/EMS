@@ -1,7 +1,7 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import workTimeSvg from '../../assets/work_time.svg';
 import { Hourglass } from 'ldrs/react'
 import 'ldrs/react/Hourglass.css'
@@ -14,7 +14,8 @@ const forgotSchema = z.object({
 type ForgotFormValues = z.infer<typeof forgotSchema>;
 
 export default function ForgotPassword() {
-  const { mutate: sendResetLink, isPending, isSuccess } = useForgotPassword();
+  const navigate = useNavigate();
+  const { mutateAsync: sendResetLink, isPending, isSuccess } = useForgotPassword();
 
   const {
     register,
@@ -25,8 +26,9 @@ export default function ForgotPassword() {
     defaultValues: { email: '' },
   });
 
-  const onSubmit = (data: ForgotFormValues) => {
-    sendResetLink({ email: data.email });
+  const onSubmit = async (data: ForgotFormValues) => {
+    await sendResetLink({ email: data.email });
+    navigate('/reset-password', { state: { email: data.email } });
   };
 
   return (

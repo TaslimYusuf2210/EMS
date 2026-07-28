@@ -104,6 +104,14 @@ export default function Dashboard() {
           <h3 className="font-bold text-sm text-neutral-900 mb-4">Employment Status Distribution</h3>
           {isError ? (
             <div className="flex items-center justify-center h-56 text-neutral-400 text-sm">Failed to load data</div>
+          ) : pieTotal === 0 ? (
+            <div className="flex flex-col items-center justify-center h-56 text-neutral-400 gap-2">
+              <svg className="w-10 h-10 text-neutral-300" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 3v18h18M7 16l4-4 3 2 4-6" />
+              </svg>
+              <span className="text-sm">No employee data yet</span>
+              <span className="text-xs text-neutral-300">Status distribution will appear here once employees are added.</span>
+            </div>
           ) : (
             <div className="flex items-center gap-8">
               <ResponsiveContainer width="55%" height={300}>
