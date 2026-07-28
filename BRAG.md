@@ -426,3 +426,13 @@ Wired up the notes section in employee details with full mutations:
 - Integrated into `NotesSection.tsx` with proper loading/error states and toast feedback.
 
 ---
+
+## 2026-07-28
+
+### Dashboard — Empty State for Employment Status PieChart
+
+Added an empty state to the Employment Status Distribution section when no employees exist yet.
+
+- **Problem**: The pie chart always rendered because `statusDist` returns all 6 status keys (`active`, `inactive`, `probation`, `onleave`, `resigned`, `terminated`) — even when all values are 0. Checking `pieData.length === 0` never triggered because the array always has 6 entries.
+- **Fix**: Changed the guard to `pieTotal === 0` (the sum of all status values). When no employees exist, the sum is 0 and the empty state renders with a chart icon, "No employee data yet" message, and helper text.
+- **Three-state coverage**: error (`isError`) → empty (`pieTotal === 0`) → populated (pie chart + legend).
