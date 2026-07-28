@@ -347,3 +347,82 @@ Learned how `select` works as a transformer in `useQuery`.
   ```
 
 ---
+
+## 2026-07-22
+
+### Education Form Overhaul — Nigeria Data Dropdowns
+
+Completely redesigned the education form after a debate about `qualification` vs `degree` overlap.
+
+- **Removed `degree` field** from the `Education` type entirely. The insight: not all qualifications are degrees (e.g., RN, HND, NCE are credentials, not degrees). Each education entry now represents **one qualification** — users with multiple credentials create multiple records.
+- **Qualification dropdown**: Replaced free-text input with a searchable dropdown sourced from `NigeriaDegreeTypes.js` (`tertiary_qualifications`), covering everything from certificates (RN) to postgraduate degrees (PhD).
+- **Institution searchable dropdown**: Wired up `NigeriaInstitutions.js` as the data source for institution name, replacing the free-text input.
+- **Field of study dropdown**: Added from Nigeria course data.
+
+### Controlled vs Uncontrolled Input Conflict
+
+Ran into a classic React Hook Form issue when mixing `value` prop with `register()`:
+
+- **Problem**: The qualification/institution dropdowns used `register()` (controlled by RHF) + a local `value` state — the two fought for control and the UI glitched.
+- **Fix**: Toggled between a read-only **badge** (when a value is selected) and a **search input** (when editing). Clicking the badge switches to input mode; selecting a value switches back to badge. This avoids the controlled/uncontrolled conflict entirely.
+
+---
+
+## 2026-07-27
+
+### Dashboard Redesign — From Mock Data to Live API
+
+Completely rebuilt `Dashboard.tsx` to remove redundancy and add meaningful widgets:
+
+- **QuickActions component**: Three action cards linking to employees, departments, and reports — gives users immediate navigation targets.
+- **DepartmentCards component**: Grid of department overview cards sourced from `useGetDashboardStats`. Scrollable container (`max-h-80 overflow-y-auto`) prevents layout blowout with many departments.
+- **RecentActivityTimeline component**: Displays 6 recent activities initially with a "View all X activities" toggle. Expanded state is scrollable. Covers 8 activity types (employee added, department created, salary updated, etc.) with emoji icons.
+- **Employment Status PieChart**: Recharts `PieChart` showing the distribution of active vs inactive vs on-leave employees.
+- **Loading skeletons**: Every section has proper skeleton placeholders while data loads.
+- **Removed all mock data**: Dashboard now exclusively uses `useGetDashboardStats` — no more hardcoded fallback values.
+
+### Reports Page — Recharts Decomposition
+
+Decomposed the monolithic `Reports.tsx` into focused sub-components:
+
+- **EmployeeMetrics**: Stat cards (total employees, department count, new hires) + `DepartmentBreakdown` with a horizontal Recharts `BarChart`. Uses `useGetEmployeeCount` hook.
+- **SalaryMetrics**: Salary stat cards (total payroll, average, highest/lowest) + `SalaryDistribution` with a vertical Recharts `BarChart`. All currency formatted as `₦` (Naira). Uses `useGetSalarySummary`.
+- **HiringTrend**: Recharts `LineChart` replacing a static SVG. Uses `useGetHiringTrend` which zips `labels` + `data` into `[{ month, employees }]`.
+- **Export buttons**: Direct `fetch`-based download with Bearer auth and toast notifications for success/failure.
+
+### AppContext Elimination
+
+Deleted `AppContext.tsx` entirely — 355 lines of mock data and shared state.
+
+- Removed `AppProvider` wrapper from `App.tsx`.
+- All data now flows through TanStack Query hooks (`useGetEmployees`, `useGetDepartments`, `useGetDashboardStats`, etc.).
+- Reports page switched from `useApp()` to direct API hooks.
+- Sidebar removed unused `useApp()` reference.
+
+### Auth — Forgot & Reset Password Flow
+
+Built the complete password recovery flow with route protection:
+
+- **`ForgotPassword.tsx`**: Email-only form using `useForgotPassword` mutation. On success: shows a checkmark toast and navigates to `/reset-password` with email in `location.state`.
+- **`ResetPassword.tsx`**: Pre-filled readonly email (from `location.state`), OTP input, new password + confirm password fields. Protected via `useEffect` redirect to `/forgot-password` if no state exists.
+- **`useForgotPassword`**: `POST /auth/forgot-password` with console.log of the response on success.
+- **`useResetPassword`**: `POST /auth/reset-password` with payload `{ email, otp, newPassword }`.
+- **Fixed `auth.ts`**: `forgotPassword` endpoint was mistakenly pointed at `/auth/login`.
+
+### Cloudinary Document Upload
+
+Implemented document upload with Cloudinary's unsigned upload preset:
+
+- **`src/services/cloudinary.ts`**: Upload utility using `auto/upload` endpoint, returns `secure_url`.
+- **PDF download handling**: Designed a backend proxy endpoint approach since Cloudinary CDN blocks direct PDF access. Download function uses `fetch` with Bearer auth.
+- **Progress indicators**: Visual feedback during upload.
+
+### Notes CRUD
+
+Wired up the notes section in employee details with full mutations:
+
+- **`useAddNote`**: Creates a note with title + content for an employee.
+- **`useDeleteNote`**: Removes a note by ID with confirmation.
+- Integrated into `NotesSection.tsx` with proper loading/error states and toast feedback.
+
+---
