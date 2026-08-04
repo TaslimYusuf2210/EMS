@@ -15,34 +15,23 @@ async function downloadDocument(
   docId: string,
   filename: string,
   employeeId: string,
-  // onDone: () => void,
 ) {
-  console.log('[Download] Starting for doc:', { docId, filename, employeeId });
-  // ...existing code...
 
   const token = localStorage.getItem('token') ?? sessionStorage.getItem('token');
-  console.log('[Download] Token:', token ? `${token.slice(0, 15)}...` : 'NONE');
 
   const url = `${API_BASE}/employees/${employeeId}/documents/${docId}/download`;
-  console.log('[Download] URL:', url);
 
   try {
-    console.log('[Download] Sending fetch...');
     const res = await fetch(url, {
       headers: { Authorization: `Bearer ${token}` },
     });
 
-    console.log('[Download] Response status:', res.status, res.statusText);
-
     if (!res.ok) {
       const text = await res.text();
-      console.error('[Download] Error body:', text);
       throw new Error(`Server returned ${res.status}: ${text}`);
     }
 
-    console.log('[Download] Reading blob...');
     const blob = await res.blob();
-    console.log('[Download] Blob size:', blob.size, 'bytes, type:', blob.type);
 
     if (blob.size === 0) throw new Error('Received empty file from server');
 
@@ -54,9 +43,7 @@ async function downloadDocument(
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(blobUrl);
-    console.log('[Download] Success!');
   } catch (err) {
-    console.error('[Download] Failed at catch block:', err);
     toast.error('Unable to download this file. The document storage may be temporarily unavailable.');
   }
 }
@@ -108,7 +95,6 @@ export function DocumentsSection({ documents, employeeId }: DocumentsSectionProp
     try {
       const fileUrl = await uploadToCloudinary(form.file);
       const payload = { name: form.name, type: form.type, fileUrl };
-      console.log('[Document upload payload]', payload);
       await addDocument(payload);
       setForm({ file: null, name: '', type: 'Resume' });
       setShowDialog(false);

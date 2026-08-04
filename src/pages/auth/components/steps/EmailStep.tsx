@@ -7,7 +7,7 @@ export function EmailStep() {
     <div className="relative group">
       <input
         type="email" id="email" placeholder="" {...register('email')}
-        className={`w-full py-3 px-4 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
+        className={`peer w-full py-3 px-4 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
           errors.email ? 'border-red-400 focus:border-red-500' : 'border-slate-200 focus:border-indigo-600'
         }`}
       />

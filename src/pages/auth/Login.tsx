@@ -28,7 +28,6 @@ export default function Login() {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -38,8 +37,6 @@ export default function Login() {
       rememberMe: false,
     },
   });
-
-  console.log('rememberMe:', watch('rememberMe'));
 
   const onSubmit = (data: LoginFormValues) => {
     loginUser({
@@ -91,7 +88,7 @@ export default function Login() {
                   id="email"
                   placeholder=""
                   {...register('email')}
-                  className={`w-full py-3 px-4 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
+                  className={`peer w-full py-3 px-4 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
                     errors.email
                       ? 'border-red-400 focus:border-red-500'
                       : 'border-slate-200 focus:border-indigo-600'
@@ -115,7 +112,7 @@ export default function Login() {
                   id="password"
                   placeholder=""
                   {...register('password')}
-                  className={`w-full py-3 px-10 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
+                  className={`peer w-full py-3 px-10 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
                     errors.password
                       ? 'border-red-400 focus:border-red-500'
                       : 'border-slate-200 focus:border-indigo-600'

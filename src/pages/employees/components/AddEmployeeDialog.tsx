@@ -49,8 +49,6 @@ export function AddEmployeeDialog({ open, onClose }: AddEmployeeDialogProps) {
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
   const { data: departmentsData } = useGetDepartments();
   const departments = departmentsData ?? [];
-  console.log('[AddEmployeeDialog] departments:', departments);
-  departments.forEach((d) => console.log(`  - id: ${d.id}, name: "${d.name}"`));
 
   const {
     register,

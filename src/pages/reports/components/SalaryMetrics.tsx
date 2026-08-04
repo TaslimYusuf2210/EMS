@@ -37,7 +37,6 @@ function SalaryDistribution() {
     const { data: salarySummary, isLoading: isSalarySummaryLoading, isError: isSalarySummaryError } = useGetSalarySummary();
 
     const salaryDistributionByDepartment = salarySummary?.salaryDistributionByDepartment ?? [];
-  console.log('[SalaryDistribution] data:', salaryDistributionByDepartment);
 
   return (
     <div className="bg-white border border-neutral-200 rounded-2xl p-6 shadow-sm">

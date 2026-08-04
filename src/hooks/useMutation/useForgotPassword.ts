@@ -5,8 +5,7 @@ import { forgotPassword, type ForgotPasswordPayload } from '../../services/auth'
 export const useForgotPassword = () => {
   return useMutation({
     mutationFn: (payload: ForgotPasswordPayload) => forgotPassword(payload),
-    onSuccess: (data) => {
-      console.log('[ForgotPassword] Response:', data);
+    onSuccess: () => {
       toast.success('OTP has been sent to your email.');
     },
     onError: (error: any) => {

@@ -12,8 +12,7 @@ export const useCreateDepartmentPositions = (departmentId: string, options?: { o
         options?.onSuccess?.();
         toast.success('Department position(s) created successfully!');
       },
-      onError: (error: any) => {
-        console.error('Error creating department position(s):', error);
+      onError: () => {
         toast.error('Failed to create department position(s). Please try again.');
       }
     });

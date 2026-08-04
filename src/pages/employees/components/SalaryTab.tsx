@@ -25,7 +25,6 @@ export function SalaryTab({ employee }: SalaryTabProps) {
   const [showDialog, setShowDialog] = useState(false);
   const s = employee.Salary ?? { baseSalary: 0, bonus: 0, allowances: 0 };
   const total = (Number(s.baseSalary) || 0) + (Number(s.bonus) || 0) + (Number(s.allowances) || 0);
-  console.log('[SalaryTab] employee salary data:', employee.Salary);
 
   const {
     register,

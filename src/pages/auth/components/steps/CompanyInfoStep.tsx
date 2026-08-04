@@ -14,7 +14,7 @@ export function CompanyInfoStep() {
     <div className="space-y-6">
       <div className="relative group">
         <input type="text" id="companyName" placeholder="" {...register('companyName')}
-          className={`w-full py-3 px-4 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
+          className={`peer w-full py-3 px-4 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
             errors.companyName ? 'border-red-400 focus:border-red-500' : 'border-slate-200 focus:border-indigo-600'
           }`}
         />

@@ -1,4 +1,4 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useGetCurrentUser } from "../hooks/useQuery/useGetCurrentUser";
 
 interface SidebarProps {
@@ -8,8 +8,8 @@ interface SidebarProps {
 
 export default function Sidebar({ onClose, isDrawer = false }: SidebarProps) {
   const { data: currentUser } = useGetCurrentUser();
-  console.log('Current user data in Sidebar:', currentUser);
   const location = useLocation();
+  const navigate = useNavigate();
   const navItems = [
     {
       name: "Dashboard",
@@ -115,11 +115,9 @@ export default function Sidebar({ onClose, isDrawer = false }: SidebarProps) {
   ];
 
   function handleLogout() {
-    // Clear user data from localStorage or any other storage mechanism
     localStorage.removeItem('token');
     sessionStorage.removeItem('token');
-    // Redirect to login page
-    window.location.href = "/login";
+    navigate('/login');
   }
   return (
     <div
@@ -197,10 +195,10 @@ export default function Sidebar({ onClose, isDrawer = false }: SidebarProps) {
 
       {/* Logout button at bottom */}
       <div className="pt-5 border-t border-neutral-100 md:px-3.5 md:pb-4">
-        <Link
-          to="/login"
+        <button
+          onClick={handleLogout}
           className={`
-            flex items-center gap-3 px-3 py-2.5 text-neutral-500 hover:text-red-600 rounded-xl text-sm font-bold transition-all
+            flex items-center gap-3 px-3 py-2.5 text-neutral-500 hover:text-red-600 rounded-xl text-sm font-bold transition-all w-full cursor-pointer
             ${!isDrawer ? "md:justify-center md:w-12 md:h-12 md:p-0 md:group-hover:justify-start md:group-hover:w-full md:group-hover:px-3 lg:justify-start lg:w-full lg:h-auto lg:px-3 lg:py-2.5" : ""}
           `}
           title="Logout"
@@ -220,12 +218,10 @@ export default function Sidebar({ onClose, isDrawer = false }: SidebarProps) {
               />
             </svg>
           </span>
-          <span
-          onClick={handleLogout}
-          className={`${isDrawer ? "inline" : "hidden md:hidden md:group-hover:inline lg:inline"} whitespace-nowrap`}>
+          <span className={`${isDrawer ? "inline" : "hidden md:hidden md:group-hover:inline lg:inline"} whitespace-nowrap`}>
             Logout
           </span>
-        </Link>
+        </button>
       </div>
     </div>
   );

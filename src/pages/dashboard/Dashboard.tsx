@@ -25,15 +25,12 @@ export default function Dashboard() {
   const recentEmployees = stats?.recentEmployees ?? [];
   const departments = stats?.departmentOverview ?? [];
   const recentActivity = stats?.recentActivity ?? [];
-  console.log('[Dashboard] recentActivity:', recentActivity);
   const statusDist = stats?.statusDistribution;
 
   const pieData = statusDist
     ? Object.entries(statusDist).map(([name, value]) => ({ name, value }))
     : [];
   const pieTotal = pieData.reduce((sum, d) => sum + d.value, 0);
-  console.log('[Dashboard] statusDistribution:', statusDist);
-  console.log('[Dashboard] pieData:', pieData);
 
   return (
     <div className="space-y-6">

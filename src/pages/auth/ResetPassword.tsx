@@ -31,7 +31,6 @@ export default function ResetPassword() {
     }
   }, [emailFromState, navigate]);
 
-  if (!emailFromState) return null;
   const [showPassword, setShowPassword] = useState(false);
   const { mutate: resetPassword, isPending, isSuccess } = useResetPassword();
 
@@ -43,6 +42,8 @@ export default function ResetPassword() {
     resolver: zodResolver(resetSchema),
     defaultValues: { email: emailFromState, otp: '', newPassword: '', confirmPassword: '' },
   });
+
+  if (!emailFromState) return null;
 
   const onSubmit = (data: ResetFormValues) => {
     resetPassword({

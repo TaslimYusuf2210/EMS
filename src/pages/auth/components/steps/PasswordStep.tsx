@@ -26,7 +26,7 @@ export function PasswordStep() {
     <div className="space-y-6">
       <div className="relative group">
         <input type={showPassword ? 'text' : 'password'} id="password" placeholder="" {...register('password')}
-          className={`w-full py-3 px-10 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
+          className={`peer w-full py-3 px-10 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
             errors.password ? 'border-red-400 focus:border-red-500' : 'border-slate-200 focus:border-indigo-600'
           }`}
         />
@@ -43,7 +43,7 @@ export function PasswordStep() {
       </div>
       <div className="relative group">
         <input type={showConfirm ? 'text' : 'password'} id="confirmPassword" placeholder="" {...register('confirmPassword')}
-          className={`w-full py-3 px-10 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
+          className={`peer w-full py-3 px-10 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
             errors.confirmPassword ? 'border-red-400 focus:border-red-500' : 'border-slate-200 focus:border-indigo-600'
           }`}
         />

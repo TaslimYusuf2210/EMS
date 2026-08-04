@@ -113,7 +113,6 @@ export default function CreateAccount() {
         password: data.password,
         agreeTerms: data.agreeTerms,
       };
-      console.log(payload);
       try {
         await registerUser(payload);
       } catch {

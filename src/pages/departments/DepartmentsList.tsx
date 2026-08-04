@@ -102,7 +102,6 @@ export default function DepartmentsList() {
               </thead>
               <tbody className="divide-y divide-neutral-100">
                 {departments.map((dep, index) => {
-                  console.log(`[DepartmentsList] Row ${index + 1}:`, dep);
                   return (
                     <tr
                       key={dep.id}

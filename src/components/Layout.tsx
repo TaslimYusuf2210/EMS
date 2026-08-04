@@ -80,8 +80,6 @@ export default function Layout() {
               />
             </svg>
           </button>
-          <div className="lg:hidden"></div>
-          <button className="lg:hidden">Icon</button>
         </header>
 
         {/* View Wrapper */}

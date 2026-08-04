@@ -34,7 +34,6 @@ export default function Reports() {
       URL.revokeObjectURL(url);
       toast.success(`${format.toUpperCase()} report downloaded.`);
     } catch (err) {
-      console.error('[Export] Failed:', err);
       toast.error('Export failed. Please try again.');
     } finally {
       setExportingFormat(null);

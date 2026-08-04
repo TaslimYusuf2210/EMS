@@ -16,7 +16,7 @@ export function OtpStep() {
           maxLength={6}
           autoComplete="one-time-code"
           {...register('otp')}
-          className={`w-full text-center text-2xl tracking-[0.5em] py-3 px-4 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
+          className={`peer w-full text-center text-2xl tracking-[0.5em] py-3 px-4 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
             errors.otp ? 'border-red-400 focus:border-red-500' : 'border-slate-200 focus:border-indigo-600'
           }`}
         />

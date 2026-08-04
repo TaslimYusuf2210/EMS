@@ -28,9 +28,18 @@ export default function EmployeeDetails() {
 
   const [activeTab, setActiveTab] = useState<TabType>('personal');
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
-  const { data: employee } = useGetEmployeeById(id);
-  console.log('[EmployeeDetails] employee:', employee);
-  console.log('[EmployeeDetails] id from params:', id);
+  const { data: employee, isLoading: isEmployeeLoading } = useGetEmployeeById(id);
+
+  if (isEmployeeLoading) {
+    return (
+      <div className="py-12 flex justify-center">
+        <div className="space-y-4 w-full max-w-2xl animate-pulse">
+          <div className="h-6 bg-neutral-100 rounded w-48" />
+          <div className="h-4 bg-neutral-100 rounded w-32" />
+        </div>
+      </div>
+    );
+  }
 
   if (!employee) {
     return (
