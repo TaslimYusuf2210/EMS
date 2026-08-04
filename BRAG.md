@@ -436,3 +436,79 @@ Added an empty state to the Employment Status Distribution section when no emplo
 - **Problem**: The pie chart always rendered because `statusDist` returns all 6 status keys (`active`, `inactive`, `probation`, `onleave`, `resigned`, `terminated`) — even when all values are 0. Checking `pieData.length === 0` never triggered because the array always has 6 entries.
 - **Fix**: Changed the guard to `pieTotal === 0` (the sum of all status values). When no employees exist, the sum is 0 and the empty state renders with a chart icon, "No employee data yet" message, and helper text.
 - **Three-state coverage**: error (`isError`) → empty (`pieTotal === 0`) → populated (pie chart + legend).
+
+---
+
+## 2026-08-04
+
+### Global Code Audit — Multi-Agent Exploration
+
+Ran a comprehensive 3-agent parallel audit of the entire codebase to surface issues across config, components, services/hooks/types, and architecture.
+
+- **Technique**: Launched 3 explore agents simultaneously, each targeting a different layer:
+  1. **Structure & config** — project setup, dependencies, routing, tooling
+  2. **Components & patterns** — React patterns, accessibility, dead code, inline styles
+  3. **Services, hooks, types & state** — API layer, auth, error handling, types
+- **Why parallel**: Each agent independently scans its domain without waiting. Combined report > sum of parts — cross-layer issues (e.g., "token stored in 6 files with no single source of truth") only surface when all layers are compared.
+- **Output**: 21 findings ranked by severity — 4 critical, 5 high, 7 medium, 5 low.
+
+### Security — Password & Token Leaked to Console
+
+Fixed two critical data-leak bugs:
+
+- **`CreateAccount.tsx:116`**: `console.log(payload)` — the full registration payload was being logged to the browser console, **including the plaintext password**. This means anyone with physical access, browser extension access, or a screen-sharing leak could see user passwords in plaintext.
+- **`DocumentsSection.tsx:24`**: `console.log('Token:', token.slice(0,15))` — auth token prefix logged on every document download. Even truncated, a token prefix is a security risk and violates the principle of never logging credentials.
+- **Fix**: Removed the `console.log` entirely. No replacement — the payload was only logged for debugging, not for any functional purpose.
+- **Broader sweep**: Removed all 32 `console.log`/`console.error` statements across 15+ files (pages, hooks, services). Production code should never log to the console.
+
+### Rules of Hooks Violation — Latent Crash in ResetPassword
+
+- **Bug**: `ResetPassword.tsx` called `useState`, `useResetPassword`, and `useForm` **after** an early `return null` guard (`if (!emailFromState) return null`). React hooks must be called unconditionally in the same order on every render.
+- **Why it crashes**: Under React StrictMode or on re-render, the component returns early (no hooks run) then renders fully (hooks run). React expects the same number of hook calls each render — the mismatch throws "Rendered more hooks than during the previous render."
+- **Fix**: Moved all hooks before the early return. The hooks now run on every render, and the guard only controls what JSX is returned. This is the canonical pattern for conditionally guarded components that need hooks.
+
+### Loading State vs Empty State — "Not Found" Flash
+
+- **Bug**: `EmployeeDetails.tsx` and `DepartmentDetails.tsx` both rendered "Employee/Department not found" immediately when data was `undefined` — with no check for `isLoading`. Every page load flashed the error state for a split second.
+- **Root cause**: `useGetEmployeeById` returns `undefined` while fetching, but the component treated `undefined` as "doesn't exist" instead of "still loading."
+- **Fix**: Added `isLoading` checks before the "not found" guard. While loading, a skeleton placeholder renders. Only when loading completes **and** data is still missing does the "not found" message appear. This gives users visual feedback instead of a misleading error.
+
+### Logout Click-Target Bug
+
+- **Bug**: Sidebar logout was a `<Link to="/login">` with the `onClick={handleLogout}` handler on an inner `<span>`. Clicking the icon or padding area navigated to `/login` **without** clearing `localStorage`/`sessionStorage` — silently leaving the auth token in place.
+- **Fix**: Replaced the `<Link>` with a `<button>` whose `onClick` handler calls `handleLogout` (clears tokens, then `navigate('/login')`). The entire button area is now one click target.
+- **Bonus**: Changed `window.location.href = '/login'` to `useNavigate()('/login')` — no full page reload, and React Query cache is preserved for the next login session.
+
+### Broken Floating Labels — Missing `peer` Class
+
+- **Bug**: All auth form inputs use `peer-placeholder-shown:` selectors on their labels (Tailwind's CSS-only floating label pattern), but none of the inputs had the `peer` class. The float animation never fired — labels permanently overlapped the input area.
+- **Fix**: Added `peer` to every input's className across 6 files: `Login.tsx`, `ForgotPassword.tsx`, `EmailStep.tsx`, `OtpStep.tsx`, `PasswordStep.tsx`, `CompanyInfoStep.tsx`.
+- **How it works**: `peer` makes the input visible to sibling elements via CSS. The label's `peer-placeholder-shown:text-base` and `peer-focus:text-xs` classes now target the sibling input correctly — label floats up when focused or filled.
+
+### Corrupted Tailwind Classes — Botched Find/Replace
+
+- **Bug**: `DepartmentDetails.tsx` had corrupted class names from a mangled find/replace: `-[#e9edc9]` (missing `bg` prefix), `-[#ccd5ae]` (gibberish), `:bg-[#faedcd]/30` (extra colon). All silently ignored by Tailwind — the styling was just broken.
+- **Fix**: Replaced corrupted classes with the correct Tailwind v4 surface tokens (`bg-surface-muted`, `bg-surface-deep`, `hover:bg-surface-warm/30`). Also removed 30+ `{" "}` JSX whitespace artifacts.
+
+### Dead Code Removal
+
+Deleted 4 entirely unused files:
+- **`store/authStore.ts`** — Zustand store never imported anywhere. Auth state was duplicated raw across 6 files instead.
+- **`types/components.ts`** — All interfaces (`EmptyStateProps`, `PageHeaderProps`, etc.) unused. Every component re-declares its own prop types.
+- **`types/settings.ts`** — One-line re-export shim, never imported.
+- **`hooks/useQuery/useGetPosition.ts`** — Empty file, never imported.
+
+Also removed a dead placeholder `<button>Icon</button>` from `Layout.tsx`.
+
+### Error Boundary
+
+Created `src/components/ErrorBoundary.tsx` — a React class component wrapping the entire app in `App.tsx`. Catches render crashes (e.g., Recharts error, null-pointer in JSX) and shows a user-friendly "Something went wrong" message with a refresh button instead of unmounting the entire app.
+
+### `.env.example` Created
+
+Added `.env.example` documenting `VITE_API_BASE_URL`, `VITE_CLOUDINARY_CLOUD_NAME`, and `VITE_CLOUDINARY_UPLOAD_PRESET`. The project previously had no environment variable documentation — new developers got silent `localhost:5000` fallbacks.
+
+### TypeScript Config — `baseUrl` Deprecation
+
+- **Warning**: `baseUrl` is deprecated in TS6 and will stop functioning in TS7.
+- **Fix**: Removed `baseUrl: "."` from `tsconfig.app.json`. Changed paths to `"@/*": ["./src/*"]` (relative) — no deprecation warning, alias still works. Vite's alias is unchanged.
