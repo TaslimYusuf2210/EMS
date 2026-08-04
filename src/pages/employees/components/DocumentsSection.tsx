@@ -78,7 +78,6 @@ export function DocumentsSection({ documents, employeeId }: DocumentsSectionProp
   const { mutateAsync: deleteDocument } = useDeleteDocument(employeeId);
   const [showDialog, setShowDialog] = useState(false);
   const [deleteLoadingId, setDeleteLoadingId] = useState<string | null>(null);
-  const [downloadLoadingId, setDownloadLoadingId] = useState<string | null>(null);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 

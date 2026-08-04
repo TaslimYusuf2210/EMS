@@ -7,7 +7,7 @@ import { useGetDashboardStats } from '../../hooks/useQuery/useGetDashboardStats'
 import { RecentActivityTimeline } from './components/RecentActivityTimeline';
 import { QuickActions } from './components/QuickActions';
 import { DepartmentCards } from './components/DepartmentCards';
-import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer, Label } from 'recharts';
+import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from 'recharts';
 import type { RecentEmployee } from '../../types/dashboard/dashboard';
 
 const STATUS_COLORS: Record<string, string> = {
@@ -124,7 +124,7 @@ export default function Dashboard() {
                     outerRadius={120}
                     dataKey="value"
                     stroke="none"
-                    label={({ name, value }) => {
+                    label={({ value }) => {
                       const pct = pieTotal > 0 ? Math.round((value / pieTotal) * 100) : 0;
                       return pct > 0 ? `${pct}%` : '';
                     }}

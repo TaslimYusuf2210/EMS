@@ -11,11 +11,11 @@ export const useGetEmployeeById = (id: string | undefined) => {
       if (!res.data?.employee) return undefined;
       return {
         ...res.data.employee,
-        salary: res.data.Salary ?? res.data.employee.salary,
-        bankAccount: res.data.BankAccount ?? res.data.employee.bankAccount,
-        education: res.data.Education ?? res.data.employee.education,
-        documents: res.data.Documents ?? res.data.employee.documents,
-        notes: res.data.Notes ?? res.data.employee.notes,
+        Salary: res.data.Salary ?? res.data.employee.Salary,
+        BankAccount: res.data.BankAccount ?? res.data.employee.BankAccount,
+        Education: res.data.Education ?? res.data.employee.Education,
+        Documents: res.data.Documents ?? res.data.employee.Documents,
+        Notes: res.data.Notes ?? res.data.employee.Notes,
       } as Employee;
     },
     refetchOnMount: true,

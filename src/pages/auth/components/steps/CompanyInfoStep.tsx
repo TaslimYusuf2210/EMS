@@ -1,6 +1,5 @@
 import { useFormContext } from 'react-hook-form';
 import type { RegisterFormValues } from '../../schemas/registerSchema';
-// @ts-expect-error - no declaration file for NigeriaGeo.js
 import { statesAndLgas } from '@/constants/NigeriaGeo';
 
 const states = Object.keys(statesAndLgas).sort();
