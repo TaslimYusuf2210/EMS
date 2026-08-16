@@ -54,32 +54,24 @@ export interface RegisterResponse {
   };
 }
 
+export interface CompanyAddress {
+  state: string;
+  lga: string;
+  settlement: string;
+  street: string;
+}
+
 export interface CompanyInfo {
   id: string;
   name: string;
-  email: string;
-  phoneNumber: string;
-  address: {
-    state: string;
-    lga: string;
-    settlement: string;
-    street: string;
-  };
-  description: string;
-}
-
-export interface CurrentUser {
-  id: string;
-  name: string;
-  email: string;
-  role: string;
-  profilePicture: string;
-  company: CompanyInfo;
+  email: string | null;
+  phoneNumber: string | null;
+  address: CompanyAddress | null;
+  description: string | null;
 }
 
 export interface CurrentUserResponse {
-  user: CurrentUser;
-  company: CompanyInfo;
+  company: CompanyInfo | null;
 }
 
 export interface ChangePasswordPayload {
