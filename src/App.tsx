@@ -10,6 +10,7 @@ import EmployeeDetails from "./pages/employees/EmployeeDetails";
 import EmployeesList from "./pages/employees/EmployeesList";
 import Layout from "./components/Layout";
 import Landing from "./pages/landing/Landing";
+import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
@@ -51,8 +52,8 @@ function App() {
               <Route path="settings" element={<Settings />} />
             </Route>
 
-            {/* Fallback */}
-            <Route path="*" element={<Navigate to="/login" replace />} />
+            {/* Fallback: authenticated users see a 404 page, others are sent to login */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
           <Toaster />
         </BrowserRouter>
