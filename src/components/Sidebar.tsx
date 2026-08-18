@@ -1,5 +1,8 @@
+import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 import { useGetCurrentUser } from "../hooks/useQuery/useGetCurrentUser";
+import { Dialog } from "./ui/dialog";
 
 interface SidebarProps {
   onClose?: () => void;
@@ -10,6 +13,7 @@ export default function Sidebar({ onClose, isDrawer = false }: SidebarProps) {
   const { data: currentUser } = useGetCurrentUser();
   const location = useLocation();
   const navigate = useNavigate();
+  const [showLogoutDialog, setShowLogoutDialog] = useState(false);
   const navItems = [
     {
       name: "Dashboard",
@@ -115,8 +119,10 @@ export default function Sidebar({ onClose, isDrawer = false }: SidebarProps) {
   ];
 
   function handleLogout() {
+    setShowLogoutDialog(false);
     localStorage.removeItem('token');
     sessionStorage.removeItem('token');
+    toast.success('Logged out successfully');
     navigate('/login');
   }
   return (
@@ -196,7 +202,7 @@ export default function Sidebar({ onClose, isDrawer = false }: SidebarProps) {
       {/* Logout button at bottom */}
       <div className="pt-5 border-t border-neutral-100 md:px-3.5 md:pb-4">
         <button
-          onClick={handleLogout}
+          onClick={() => setShowLogoutDialog(true)}
           className={`
             flex items-center gap-3 px-3 py-2.5 text-neutral-500 hover:text-red-600 rounded-xl text-sm font-bold transition-all w-full cursor-pointer
             ${!isDrawer ? "md:justify-center md:w-12 md:h-12 md:p-0 md:group-hover:justify-start md:group-hover:w-full md:group-hover:px-3 lg:justify-start lg:w-full lg:h-auto lg:px-3 lg:py-2.5" : ""}
@@ -223,6 +229,47 @@ export default function Sidebar({ onClose, isDrawer = false }: SidebarProps) {
           </span>
         </button>
       </div>
+
+      {/* Logout confirmation modal */}
+      <Dialog open={showLogoutDialog} onClose={() => setShowLogoutDialog(false)} size="sm">
+        <div className="text-center py-2">
+          <div className="w-12 h-12 mx-auto rounded-full bg-red-50 flex items-center justify-center mb-4">
+            <svg
+              className="w-6 h-6 text-red-500"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              />
+            </svg>
+          </div>
+          <h3 className="text-lg font-bold text-neutral-900">Log out of StaffSync?</h3>
+          <p className="text-sm text-neutral-500 mt-1.5">
+            Are you sure you want to log out? You'll need to sign in again to continue.
+          </p>
+          <div className="flex gap-2 justify-center pt-6">
+            <button
+              type="button"
+              onClick={() => setShowLogoutDialog(false)}
+              className="px-3.5 py-2 bg-neutral-100 hover:bg-neutral-200 text-xs font-bold rounded-xl cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleLogout}
+              className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl text-xs font-bold transition-all cursor-pointer"
+            >
+              Log out
+            </button>
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 }

@@ -5,6 +5,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
   return (
     <Sonner
       className="toaster group"
+      richColors
       icons={{
         success: (
           <CircleCheckIcon className="size-4" />
@@ -27,6 +28,12 @@ const Toaster = ({ ...props }: ToasterProps) => {
           "--normal-bg": "#1e293b",
           "--normal-text": "#f8fafc",
           "--normal-border": "#334155",
+          "--success-bg": "#1e293b",
+          "--success-text": "#f8fafc",
+          "--success-border": "#334155",
+          "--error-bg": "#7f1d1d",
+          "--error-text": "#fecaca",
+          "--error-border": "#b91c1c",
           "--border-radius": "var(--radius)",
         } as React.CSSProperties
       }
