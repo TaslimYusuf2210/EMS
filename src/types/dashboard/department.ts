@@ -14,6 +14,7 @@ export interface Department {
   name: string;
   description: string;
   head: string;
+  headId?: string | null;
   dateCreated: string;
   employeeCount: number;
   positions: DepartmentPosition[];
@@ -27,12 +28,14 @@ export interface CreateDepartmentPayload {
   name: string;
   description: string;
   head?: string;
+  headId?: string | null;
 }
 
 export interface UpdateDepartmentPayload {
   name?: string;
   description?: string;
   head?: string;
+  headId?: string | null;
   positions?: DepartmentPosition[];
 }
 

@@ -115,6 +115,8 @@ export function AddEmployeeDialog({ open, onClose }: AddEmployeeDialogProps) {
 
   const onSubmit = async (data: EmployeeFormValues) => {
     if (step < 2) return;
+    const selectedDept = departments.find((d) => d.name === data.department);
+    const selectedPosition = positionsList.find((p) => p.title === data.position);
     await createEmployee({
       firstName: data.firstName,
       lastName: data.lastName,
@@ -122,7 +124,9 @@ export function AddEmployeeDialog({ open, onClose }: AddEmployeeDialogProps) {
       phoneNumber: data.phoneNumber,
       gender: data.gender,
       department: data.department || '',
+      departmentId: selectedDept?.id ?? null,
       position: data.position || '',
+      positionId: selectedPosition?.id ?? null,
       employmentType: data.employmentType,
       hireDate: data.hireDate,
       status: data.status,
@@ -314,7 +318,7 @@ export function AddEmployeeDialog({ open, onClose }: AddEmployeeDialogProps) {
                 </div>
                 <div>
                   <span className="text-neutral-400 font-bold block">Position</span>
-                  <span className="text-neutral-900">{watch('position')}</span>
+                  <span className="text-neutral-900">{watch('position') || 'Not assigned'}</span>
                 </div>
                 <div>
                   <span className="text-neutral-400 font-bold block">Type</span>

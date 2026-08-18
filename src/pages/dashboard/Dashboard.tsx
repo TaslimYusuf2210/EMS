@@ -210,10 +210,10 @@ export default function Dashboard() {
                   </TableCell>
                   <TableCell>
                     <span className="px-2 py-0.5 bg-neutral-100 text-neutral-800 text-[10px] font-bold rounded border border-neutral-200">
-                      {emp.department}
+                      {emp.department || "Not Assigned"}
                     </span>
                   </TableCell>
-                  <TableCell className="text-neutral-600 font-medium">{emp.position}</TableCell>
+                  <TableCell className="text-neutral-600 font-medium">{emp.position || "Not Assigned"}</TableCell>
                   <TableCell className="text-neutral-500 font-bold">{emp.hireDate}</TableCell>
                 </TableRow>
               ))}

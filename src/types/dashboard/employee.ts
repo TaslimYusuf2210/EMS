@@ -43,7 +43,9 @@ export interface Employee {
   phoneNumber: string;
   gender: string;
   department: string;
+  departmentId?: string | null;
   position: string;
+  positionId?: string | null;
   employmentType: 'Full-time' | 'Part-time' | 'Contract' | 'Intern' | 'Remote';
   hireDate: string;
   status: 'Active' | 'Inactive' | 'Probation' | 'Resigned' | 'Terminated' | 'OnLeave';
@@ -51,6 +53,7 @@ export interface Employee {
   address: string;
   emergencyContact: string;
   reportingManager: string;
+  reportingManagerId?: string | null;
   photoUrl?: string;
   Education: Education[];
   Salary: Salary;
@@ -133,10 +136,13 @@ export interface UpdateEmployeePayload {
   address?: string;
   emergencyContact?: string;
   department?: string;
+  departmentId?: string | null;
   position?: string;
+  positionId?: string | null;
   employmentType?: string;
   hireDate?: string;
   reportingManager?: string;
+  reportingManagerId?: string | null;
   status?: string;
   photoUrl?: string;
 }
@@ -148,7 +154,11 @@ export interface CreateEmployeePayload {
   phoneNumber: string;
   gender: string;
   department: string;
+  departmentId?: string | null;
   position: string;
+  positionId?: string | null;
+  reportingManager?: string;
+  reportingManagerId?: string | null;
   employmentType: string;
   hireDate?: string;
   status?: string;

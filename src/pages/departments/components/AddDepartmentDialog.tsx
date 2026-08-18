@@ -25,6 +25,7 @@ export function AddDepartmentDialog({ open, onClose }: AddDepartmentDialogProps)
   const [headSearch, setHeadSearch] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [validatedHead, setValidatedHead] = useState('');
+  const [validatedHeadId, setValidatedHeadId] = useState<string | null>(null);
   const { data: employeesData, isLoading: isSearching } = useGetEmployees(
     headSearch.length > 0 ? { search: headSearch, limit: 10 } : undefined
   );
@@ -52,11 +53,13 @@ export function AddDepartmentDialog({ open, onClose }: AddDepartmentDialogProps)
     setHeadSearch('');
     setShowDropdown(false);
     setValidatedHead('');
+    setValidatedHeadId(null);
   }, [open]);
 
-  const selectEmployee = (name: string) => {
-    setValidatedHead(name);
-    setValue('head', name);
+  const selectEmployee = (employee: { id: string; name: string }) => {
+    setValidatedHead(employee.name);
+    setValidatedHeadId(employee.id);
+    setValue('head', employee.name);
     setHeadSearch('');
     setShowDropdown(false);
   };
@@ -70,6 +73,7 @@ export function AddDepartmentDialog({ open, onClose }: AddDepartmentDialogProps)
       name: data.name,
       description: data.description,
       head: data.head || undefined,
+      headId: data.head ? validatedHeadId : null,
     });
   };
 
@@ -78,6 +82,7 @@ export function AddDepartmentDialog({ open, onClose }: AddDepartmentDialogProps)
     setHeadSearch('');
     setShowDropdown(false);
     setValidatedHead('');
+    setValidatedHeadId(null);
     onClose();
   };
 
@@ -128,7 +133,7 @@ export function AddDepartmentDialog({ open, onClose }: AddDepartmentDialogProps)
                       <button
                         key={emp.id}
                         type="button"
-                        onMouseDown={() => selectEmployee(`${emp.firstName} ${emp.lastName}`)}
+                        onMouseDown={() => selectEmployee({ id: emp.id, name: `${emp.firstName} ${emp.lastName}` })}
                         className="w-full text-left px-3 py-2 hover:bg-neutral-50 text-xs transition-colors cursor-pointer"
                       >
                         <span className="font-bold text-neutral-900">{emp.firstName} {emp.lastName}</span>

@@ -198,9 +198,9 @@ export default function EmployeesList() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className="px-2 py-0.5 bg-neutral-100 text-neutral-800 text-[10px] font-bold rounded border border-neutral-200">{emp.department}</span>
+                    <span className="px-2 py-0.5 bg-neutral-100 text-neutral-800 text-[10px] font-bold rounded border border-neutral-200">{emp.department || 'Not Assigned'}</span>
                   </TableCell>
-                  <TableCell className="text-neutral-600 font-semibold">{emp.position}</TableCell>
+                  <TableCell className="text-neutral-600 font-semibold">{emp.position || 'Not Assigned'}</TableCell>
                   <TableCell><StatusBadge status={emp.status} /></TableCell>
                   <TableCell className="font-bold text-neutral-500">{emp.hireDate}</TableCell>
                   <TableCell className="text-right">

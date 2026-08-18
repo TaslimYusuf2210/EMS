@@ -43,6 +43,7 @@ export function EditDepartmentDialog({ department, onClose }: EditDepartmentDial
   const [headSearch, setHeadSearch] = useState('');
   const [showDropdown, setShowDropdown] = useState(false);
   const [validatedHead, setValidatedHead] = useState('');
+  const [validatedHeadId, setValidatedHeadId] = useState<string | null>(null);
 
   const { data: employeesData, isLoading: isSearching } = useGetEmployees(
     headSearch.length > 0 ? { search: headSearch, department: department?.name, limit: 10 } : undefined
@@ -68,6 +69,7 @@ export function EditDepartmentDialog({ department, onClose }: EditDepartmentDial
       setHeadSearch('');
       setShowDropdown(false);
       setValidatedHead('');
+      setValidatedHeadId(null);
     }
   }, [department]);
 
@@ -76,12 +78,14 @@ export function EditDepartmentDialog({ department, onClose }: EditDepartmentDial
       initialValues.current = { name: department.name, description: department.description, head: department.head };
       reset(initialValues.current);
       setValidatedHead(department.head);
+      setValidatedHeadId(department.headId ?? null);
     }
   }, [department, reset]);
 
-  const selectEmployee = (name: string) => {
-    setValidatedHead(name);
-    setValue('head', name);
+  const selectEmployee = (employee: { id: string; name: string }) => {
+    setValidatedHead(employee.name);
+    setValidatedHeadId(employee.id);
+    setValue('head', employee.name);
     setHeadSearch('');
     setShowDropdown(false);
   };
@@ -117,7 +121,12 @@ export function EditDepartmentDialog({ department, onClose }: EditDepartmentDial
     const hasChanges = name !== origName || description !== origDesc || head !== origHead;
 
     if (hasChanges) {
-      await updateDepartment({ name, description, head: head || undefined });
+      await updateDepartment({
+        name,
+        description,
+        head: head || undefined,
+        headId: head ? validatedHeadId : null,
+      });
     } else {
       onClose();
     }
@@ -183,7 +192,7 @@ export function EditDepartmentDialog({ department, onClose }: EditDepartmentDial
                       <button
                         key={emp.id}
                         type="button"
-                        onMouseDown={() => selectEmployee(`${emp.firstName} ${emp.lastName}`)}
+                        onMouseDown={() => selectEmployee({ id: emp.id, name: `${emp.firstName} ${emp.lastName}` })}
                         className="w-full text-left px-3 py-2 hover:bg-neutral-50 text-xs transition-colors cursor-pointer"
                       >
                         <span className="font-bold text-neutral-900">{emp.firstName} {emp.lastName}</span>
