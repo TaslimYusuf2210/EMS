@@ -9,6 +9,7 @@ import DepartmentsList from "./pages/departments/DepartmentsList";
 import EmployeeDetails from "./pages/employees/EmployeeDetails";
 import EmployeesList from "./pages/employees/EmployeesList";
 import Layout from "./components/Layout";
+import Landing from "./pages/landing/Landing";
 import Login from "./pages/auth/Login";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
@@ -30,6 +31,9 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
+            {/* Public landing page */}
+            <Route path="/" element={<Landing />} />
+
             {/* Auth routes (no sidebar) */}
             <Route path="/login" element={<Login />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
