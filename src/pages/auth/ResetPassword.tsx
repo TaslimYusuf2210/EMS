@@ -11,7 +11,7 @@ import { useResetPassword } from '../../hooks/useMutation/useResetPassword';
 const resetSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
   otp: z.string().min(1, { message: 'OTP is required' }),
-  newPassword: z.string().min(6, { message: 'Password must be at least 6 characters' }),
+  newPassword: z.string().min(8, { message: 'Password must be at least 8 characters' }),
   confirmPassword: z.string(),
 }).refine((data) => data.newPassword === data.confirmPassword, {
   message: 'Passwords do not match',
