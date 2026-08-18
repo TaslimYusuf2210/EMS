@@ -169,6 +169,7 @@ export interface EmployeeQueryParams {
   limit?: number;
   search?: string;
   department?: string;
+  departmentId?: string;
   status?: 'Active' | 'Inactive' | 'Probation' | 'Resigned' | 'Terminated' | 'OnLeave';
   sortBy?: 'name' | 'dept' | 'joined';
   sortOrder?: 'asc' | 'desc';

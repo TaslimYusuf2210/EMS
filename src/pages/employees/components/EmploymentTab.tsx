@@ -34,11 +34,9 @@ export function EmploymentTab({ employee }: EmploymentTabProps) {
   const [showHeadDropdown, setShowHeadDropdown] = useState(false);
   const [validatedManagerId, setValidatedManagerId] = useState<string | null>(employee.reportingManagerId ?? null);
   const { data: employees } = useGetEmployees(
-    employee.department ? { department: employee.department } : undefined
+    employee.departmentId ? { departmentId: employee.departmentId } : undefined
   );
-  const { data: positions } = useGetDepartmentPositions(
-    departments?.find((d) => d.name === employee.department)?.id
-  );
+  const { data: positions } = useGetDepartmentPositions(employee.departmentId ?? undefined);
   const [showDialog, setShowDialog] = useState(false);
   const employeeList = (employees?.employees ?? []).filter((e) => e.id !== employee.id);
 

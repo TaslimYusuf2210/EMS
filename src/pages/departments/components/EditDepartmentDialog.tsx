@@ -46,7 +46,7 @@ export function EditDepartmentDialog({ department, onClose }: EditDepartmentDial
   const [validatedHeadId, setValidatedHeadId] = useState<string | null>(null);
 
   const { data: employeesData, isLoading: isSearching } = useGetEmployees(
-    headSearch.length > 0 ? { search: headSearch, department: department?.name, limit: 10 } : undefined
+    headSearch.length > 0 ? { search: headSearch, departmentId: department?.id, limit: 10 } : undefined
   );
   const { data: positionsData } = useGetDepartmentPositions(department?.id);
   const employeeList = employeesData?.employees ?? [];

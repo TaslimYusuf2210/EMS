@@ -25,7 +25,7 @@ export default function EmployeesList() {
     page: currentPage,
     limit: 10,
     search: searchTerm || undefined,
-    department: selectedDept === 'All' ? undefined : selectedDept,
+    departmentId: selectedDept === 'All' ? undefined : selectedDept,
     status: selectedStatus === 'All' ? undefined : selectedStatus as 'Active' | 'Inactive' | 'Probation' | 'Resigned' | 'Terminated' | 'OnLeave',
     sortBy,
     sortOrder,
@@ -108,7 +108,7 @@ export default function EmployeesList() {
           >
             <option value="All">All Departments</option>
             {departmentsData?.map((d) => (
-              <option key={d.id} value={d.name}>{d.name}</option>
+              <option key={d.id} value={d.id}>{d.name}</option>
             ))}
           </select>
         </div>
