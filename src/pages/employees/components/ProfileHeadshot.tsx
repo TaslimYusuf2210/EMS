@@ -3,6 +3,7 @@ import { Camera, Loader2, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { useUploadHeadshot } from '../../../hooks/useMutation/useUploadHeadshot';
 import { useRemoveHeadshot } from '../../../hooks/useMutation/useRemoveHeadshot';
+import { useHeadshotImage } from '../../../hooks/useQuery/useHeadshotImage';
 import { Dialog } from '../../../components/ui/dialog';
 import type { Employee } from '../../../types/dashboard/employee';
 
@@ -25,9 +26,14 @@ export function ProfileHeadshot({ employee }: ProfileHeadshotProps) {
   const { mutateAsync: removeHeadshot, isPending: isRemoving } = useRemoveHeadshot(employee.id);
   const [uploading, setUploading] = useState(false);
   const [showRemoveDialog, setShowRemoveDialog] = useState(false);
+  const [headshotVersion, setHeadshotVersion] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const headshot = employee.professionalHeadshot ?? employee.photoUrl;
+  const hasHeadshot = !!(employee.professionalHeadshot || employee.photoUrl);
+  const headshotUrl = useHeadshotImage(
+    employee.professionalHeadshot ?? employee.photoUrl,
+    headshotVersion,
+  );
   const initials = `${employee.firstName[0] ?? ''}${employee.lastName[0] ?? ''}`;
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,6 +55,7 @@ export function ProfileHeadshot({ employee }: ProfileHeadshotProps) {
       const formData = new FormData();
       formData.append('file', file);
       await uploadHeadshot(formData);
+      setHeadshotVersion((v) => v + 1);
     } catch {
       // Errors are already surfaced by useUploadHeadshot's onError.
     } finally {
@@ -60,6 +67,7 @@ export function ProfileHeadshot({ employee }: ProfileHeadshotProps) {
     try {
       await removeHeadshot();
       setShowRemoveDialog(false);
+      setHeadshotVersion((v) => v + 1);
     } catch {
       // Errors are already surfaced by useRemoveHeadshot's onError.
     }
@@ -67,9 +75,9 @@ export function ProfileHeadshot({ employee }: ProfileHeadshotProps) {
 
   return (
     <div className="relative flex-none h-60 sm:h-72 w-full sm:w-52 xl:w-60 rounded-4xl overflow-hidden border border-neutral-200 bg-neutral-950/5">
-      {headshot ? (
+      {headshotUrl ? (
         <img
-          src={headshot}
+          src={headshotUrl}
           alt={`${employee.firstName} ${employee.lastName}`}
           className="h-full w-full object-cover"
         />
@@ -79,7 +87,7 @@ export function ProfileHeadshot({ employee }: ProfileHeadshotProps) {
         </div>
       )}
 
-      {headshot && (
+      {hasHeadshot && (
         <button
           type="button"
           onClick={() => setShowRemoveDialog(true)}
