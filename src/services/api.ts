@@ -41,7 +41,6 @@ function getToken(): string | null {
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
 });
 
 // ─── Request Interceptor — attach auth token ─────────────────────────
@@ -85,11 +84,15 @@ async function request<T>(
   endpoint: string,
   options: { method?: string; data?: unknown; params?: Record<string, unknown> } = {},
 ): Promise<ApiResponse<T>> {
+  const isFormData = options.data instanceof FormData;
   const response = await apiClient.request<ApiResponse<T>>({
     url: endpoint,
     method: options.method ?? 'GET',
     data: options.data,
     params: options.params,
+    // Only force JSON for non-FormData payloads. For FormData (file uploads)
+    // we must NOT set Content-Type, so the browser adds the multipart boundary.
+    headers: isFormData ? undefined : { 'Content-Type': 'application/json' },
   });
   return response.data;
 }
