@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 import { useUploadHeadshot } from '../../../hooks/useMutation/useUploadHeadshot';
 import type { Employee } from '../../../types/dashboard/employee';
 
-const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5 MB
+const MAX_IMAGE_SIZE = 1 * 1024 * 1024; // 1 MB
 
 const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
 const ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg'];
@@ -36,7 +36,7 @@ export function ProfileHeadshot({ employee }: ProfileHeadshotProps) {
       return;
     }
     if (file.size > MAX_IMAGE_SIZE) {
-      toast.error('Image is too large. Maximum size is 5 MB.');
+      toast.error('Image is too large. Maximum size is 1 MB.');
       return;
     }
 
