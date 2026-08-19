@@ -7,6 +7,14 @@ import type { Employee } from '../../../types/dashboard/employee';
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5 MB
 
+const ALLOWED_TYPES = ['image/png', 'image/jpeg', 'image/jpg'];
+const ALLOWED_EXTENSIONS = ['png', 'jpg', 'jpeg'];
+
+function isAllowedImage(file: File): boolean {
+  const ext = file.name.split('.').pop()?.toLowerCase() ?? '';
+  return ALLOWED_TYPES.includes(file.type) || ALLOWED_EXTENSIONS.includes(ext);
+}
+
 interface ProfileHeadshotProps {
   employee: Employee;
 }
@@ -24,8 +32,8 @@ export function ProfileHeadshot({ employee }: ProfileHeadshotProps) {
     e.target.value = ''; // allow re-selecting the same file
     if (!file) return;
 
-    if (!file.type.startsWith('image/')) {
-      toast.error('Please choose an image file (JPG, PNG, etc.).');
+    if (!isAllowedImage(file)) {
+      toast.error('Only PNG, JPG, and JPEG images are allowed.');
       return;
     }
     if (file.size > MAX_IMAGE_SIZE) {
@@ -64,7 +72,7 @@ export function ProfileHeadshot({ employee }: ProfileHeadshotProps) {
       <input
         ref={fileInputRef}
         type="file"
-        accept="image/*"
+        accept="image/png,image/jpeg"
         className="hidden"
         onChange={handleFileChange}
       />
