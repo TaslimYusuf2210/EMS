@@ -11,6 +11,7 @@ import { EducationSection } from './components/EducationSection';
 import { DocumentsSection } from './components/DocumentsSection';
 import { NotesSection } from './components/NotesSection';
 import { useGetEmployeeById } from '../../hooks/useQuery/useGetEmployeeById';
+import { ProfileHeadshot } from './components/ProfileHeadshot';
 
 const TABS: { key: TabType; label: string }[] = [
   { key: 'personal', label: 'personal' },
@@ -72,19 +73,7 @@ export default function EmployeeDetails() {
       {/* Profile summary header */}
       <div className="bg-white border border-neutral-200 rounded-3xl p-6 shadow-sm">
         <div className="flex flex-col xl:flex-row xl:items-stretch gap-6">
-          <div className="flex-none h-60 sm:h-72 w-full sm:w-52 xl:w-60 rounded-4xl overflow-hidden border border-neutral-200 bg-neutral-950/5">
-            {employee.photoUrl ? (
-              <img
-                src={employee.photoUrl}
-                alt={`${employee.firstName} ${employee.lastName}`}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <div className="flex h-full w-full items-center justify-center bg-neutral-100 text-4xl font-black text-neutral-700">
-                {`${employee.firstName[0] ?? ''}${employee.lastName[0] ?? ''}`}
-              </div>
-            )}
-          </div>
+          <ProfileHeadshot employee={employee} />
 
           <div className="flex-1 flex flex-col justify-between">
             <div>

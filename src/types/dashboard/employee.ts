@@ -56,6 +56,7 @@ export interface Employee {
   reportingManager: string;
   reportingManagerId?: string | null;
   photoUrl?: string;
+  professionalHeadshot?: string;
   Education: Education[];
   Salary: Salary;
   BankAccount: BankAccount;
@@ -146,6 +147,7 @@ export interface UpdateEmployeePayload {
   reportingManagerId?: string | null;
   status?: string;
   photoUrl?: string;
+  professionalHeadshot?: string;
 }
 
 export interface CreateEmployeePayload {
