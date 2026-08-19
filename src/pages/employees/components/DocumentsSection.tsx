@@ -6,7 +6,8 @@ import { Dialog } from '../../../components/ui/dialog';
 import type { Employee, Document } from '../../../types/dashboard/employee';
 import { useAddDocument } from '@/hooks/useMutation/useAddDocument';
 import { useDeleteDocument } from '@/hooks/useMutation/useDeleteDocument';
-import { uploadToCloudinary } from '../../../services/cloudinary';
+
+const MAX_FILE_SIZE = 200 * 1024; // 200 KB
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5000/api';
 
@@ -91,16 +92,21 @@ export function DocumentsSection({ documents, employeeId }: DocumentsSectionProp
     e.preventDefault();
     if (!form.file || !form.name) return;
 
+    if (form.file.size > MAX_FILE_SIZE) {
+      toast.error('File is too large. Maximum size is 200 KB.');
+      return;
+    }
+
     setUploading(true);
     try {
-      const fileUrl = await uploadToCloudinary(form.file);
-      const payload = { name: form.name, type: form.type, fileUrl };
-      await addDocument(payload);
+      const formData = new FormData();
+      formData.append('file', form.file);
+      formData.append('name', form.name);
+      formData.append('type', form.type);
+      await addDocument(formData);
       setForm({ file: null, name: '', type: 'Resume' });
       setShowDialog(false);
     } catch (err: any) {
-      // Only fires for Cloudinary errors — the hook's onError handles backend failures
-      // If both fail, you'll see two toasts, which is fine
       toast.error(err?.message || 'Upload failed. Please try again.');
     } finally {
       setUploading(false);
@@ -225,14 +231,12 @@ export function DocumentsSection({ documents, employeeId }: DocumentsSectionProp
                 <span className="text-[10px] text-neutral-400 block mt-0.5">Type: {doc.type} | Uploaded: {doc.uploadDate}</span>
               </div>
               <div className="flex gap-2">
-                {doc.fileUrl && (
-                  <button
-                    onClick={() => downloadDocument(doc.id, doc.name, employeeId)}
-                    className="px-2 py-1 bg-neutral-100 hover:bg-neutral-200 text-[10px] font-bold rounded-lg text-neutral-700 transition-all cursor-pointer"
-                  >
-                    Download
-                  </button>
-                )}
+                <button
+                  onClick={() => downloadDocument(doc.id, doc.name, employeeId)}
+                  className="px-2 py-1 bg-neutral-100 hover:bg-neutral-200 text-[10px] font-bold rounded-lg text-neutral-700 transition-all cursor-pointer"
+                >
+                  Download
+                </button>
                 <button
                   onClick={() => handleDelete(doc.id)}
                   disabled={deleteLoadingId === doc.id}

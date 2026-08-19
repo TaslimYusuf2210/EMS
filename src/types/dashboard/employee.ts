@@ -25,7 +25,8 @@ export interface Document {
   name: string;
   type: 'Resume' | 'Employment Letter' | 'Certificates' | 'Other Documents';
   uploadDate: string;
-  fileUrl?: string;
+  mimeType?: string;
+  size?: number;
 }
 
 export interface Note {

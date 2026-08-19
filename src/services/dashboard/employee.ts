@@ -1,5 +1,5 @@
 import { request } from '../api';
-import type { EmployeesResponse, SingleEmployeeResponse, EmployeeQueryParams, CreateEmployeePayload, UpdateEmployeePayload, Education, UpdateSalaryPayload, EmployeeBankAccount, Document } from '../../types/dashboard/employee';
+import type { EmployeesResponse, SingleEmployeeResponse, EmployeeQueryParams, CreateEmployeePayload, UpdateEmployeePayload, Education, UpdateSalaryPayload, EmployeeBankAccount } from '../../types/dashboard/employee';
 
 export const getEmployees = (params?: EmployeeQueryParams) =>
   request<EmployeesResponse>('/employees', {
@@ -47,10 +47,10 @@ export const updateEmployeeBank = (id: string, payload: EmployeeBankAccount) =>
     data: payload,
   });
 
-export const addEmployeeDocument = (id: string, payload: { name: string; type: Document['type']; fileUrl: string }) =>
+export const addEmployeeDocument = (id: string, formData: FormData) =>
   request<any>(`/employees/${id}/documents`, {
     method: 'POST',
-    data: payload,
+    data: formData,
   });
 
 export const deleteEmployeeDocument = (employeeId: string, documentId: string) =>
