@@ -64,6 +64,11 @@ export const uploadEmployeeHeadshot = (id: string, formData: FormData) =>
     data: formData,
   });
 
+export const removeEmployeeHeadshot = (id: string) =>
+  request<any>(`/employees/${id}/headshot`, {
+    method: 'DELETE',
+  });
+
 export type AddNotePayload = { title: string; text: string };
 
 export const addNote = (employeeId: string, payload: AddNotePayload) =>

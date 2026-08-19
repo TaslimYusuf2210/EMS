@@ -1,7 +1,9 @@
 import { useRef, useState } from 'react';
-import { Camera, Loader2 } from 'lucide-react';
+import { Camera, Loader2, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { useUploadHeadshot } from '../../../hooks/useMutation/useUploadHeadshot';
+import { useRemoveHeadshot } from '../../../hooks/useMutation/useRemoveHeadshot';
+import { Dialog } from '../../../components/ui/dialog';
 import type { Employee } from '../../../types/dashboard/employee';
 
 const MAX_IMAGE_SIZE = 1 * 1024 * 1024; // 1 MB
@@ -20,7 +22,9 @@ interface ProfileHeadshotProps {
 
 export function ProfileHeadshot({ employee }: ProfileHeadshotProps) {
   const { mutateAsync: uploadHeadshot } = useUploadHeadshot(employee.id);
+  const { mutateAsync: removeHeadshot, isPending: isRemoving } = useRemoveHeadshot(employee.id);
   const [uploading, setUploading] = useState(false);
+  const [showRemoveDialog, setShowRemoveDialog] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const headshot = employee.professionalHeadshot ?? employee.photoUrl;
@@ -52,6 +56,15 @@ export function ProfileHeadshot({ employee }: ProfileHeadshotProps) {
     }
   };
 
+  const handleConfirmRemove = async () => {
+    try {
+      await removeHeadshot();
+      setShowRemoveDialog(false);
+    } catch {
+      // Errors are already surfaced by useRemoveHeadshot's onError.
+    }
+  };
+
   return (
     <div className="relative flex-none h-60 sm:h-72 w-full sm:w-52 xl:w-60 rounded-4xl overflow-hidden border border-neutral-200 bg-neutral-950/5">
       {headshot ? (
@@ -64,6 +77,18 @@ export function ProfileHeadshot({ employee }: ProfileHeadshotProps) {
         <div className="flex h-full w-full items-center justify-center bg-neutral-100 text-4xl font-black text-neutral-700">
           {initials}
         </div>
+      )}
+
+      {headshot && (
+        <button
+          type="button"
+          onClick={() => setShowRemoveDialog(true)}
+          disabled={isRemoving}
+          title="Remove professional headshot"
+          className="absolute top-2 right-2 w-7 h-7 rounded-full bg-red-600/90 text-white flex items-center justify-center hover:bg-red-600 transition-colors cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+        >
+          <X className="w-4 h-4" />
+        </button>
       )}
 
       <input
@@ -83,6 +108,37 @@ export function ProfileHeadshot({ employee }: ProfileHeadshotProps) {
       >
         {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Camera className="w-4 h-4" />}
       </button>
+
+      {/* Confirm remove headshot modal */}
+      <Dialog open={showRemoveDialog} onClose={() => setShowRemoveDialog(false)} size="sm">
+        <div className="text-center py-2">
+          <div className="w-12 h-12 mx-auto rounded-full bg-red-50 flex items-center justify-center mb-4">
+            <X className="w-6 h-6 text-red-500" />
+          </div>
+          <h3 className="text-lg font-bold text-neutral-900">Remove headshot?</h3>
+          <p className="text-sm text-neutral-500 mt-1.5">
+            Are you sure you want to remove the current professional headshot?
+          </p>
+          <div className="flex gap-2 justify-center pt-6">
+            <button
+              type="button"
+              onClick={() => setShowRemoveDialog(false)}
+              className="px-3.5 py-2 bg-neutral-100 hover:bg-neutral-200 text-xs font-bold rounded-xl cursor-pointer"
+            >
+              Cancel
+            </button>
+            <button
+              type="button"
+              onClick={handleConfirmRemove}
+              disabled={isRemoving}
+              className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl text-xs font-bold transition-all cursor-pointer disabled:opacity-60 disabled:cursor-not-allowed inline-flex items-center gap-1.5"
+            >
+              {isRemoving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+              {isRemoving ? 'Removing...' : 'Remove'}
+            </button>
+          </div>
+        </div>
+      </Dialog>
     </div>
   );
 }
