@@ -1,8 +1,7 @@
 import { useRef, useState } from 'react';
 import { Camera, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
-import { useUpdateEmployee } from '../../../hooks/useMutation/useUpdateEmployee';
-import { uploadImageToCloudinary } from '../../../services/cloudinary';
+import { useUploadHeadshot } from '../../../hooks/useMutation/useUploadHeadshot';
 import type { Employee } from '../../../types/dashboard/employee';
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5 MB
@@ -20,7 +19,7 @@ interface ProfileHeadshotProps {
 }
 
 export function ProfileHeadshot({ employee }: ProfileHeadshotProps) {
-  const { mutateAsync: updateEmployee } = useUpdateEmployee(employee.id);
+  const { mutateAsync: uploadHeadshot } = useUploadHeadshot(employee.id);
   const [uploading, setUploading] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -43,13 +42,11 @@ export function ProfileHeadshot({ employee }: ProfileHeadshotProps) {
 
     setUploading(true);
     try {
-      const url = await uploadImageToCloudinary(file);
-      await updateEmployee({ professionalHeadshot: url });
-    } catch (err: any) {
-      // Mutation errors are already surfaced by useUpdateEmployee's onError.
-      if (!err || err.name !== 'ApiError') {
-        toast.error(err?.message || 'Failed to upload headshot.');
-      }
+      const formData = new FormData();
+      formData.append('file', file);
+      await uploadHeadshot(formData);
+    } catch {
+      // Errors are already surfaced by useUploadHeadshot's onError.
     } finally {
       setUploading(false);
     }
