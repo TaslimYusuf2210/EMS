@@ -38,7 +38,7 @@ export default function Dashboard() {
       <PageHeader title="Overview" description="Here is what is happening across your workspace today." />
 
       {/* STATISTICS CARDS */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+      <section className="grid grid-cols-2 lg:grid-cols-5 gap-4">
         {isLoading ? (
           Array.from({ length: 5 }).map((_, i) => (
             <div key={i} className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm animate-pulse">
