@@ -184,7 +184,44 @@ export function EmploymentTab({ employee }: EmploymentTabProps) {
             Edit
           </button>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-xs">
+        {/* Mobile (sm and below) grouped layout */}
+        <div className="grid grid-cols-2 gap-6 text-xs sm:hidden">
+          <div className="min-w-0">
+            <span className="text-neutral-400 font-bold block mb-1">Employee ID</span>
+            <p className="font-bold text-neutral-900 text-sm break-words">{employee.id}</p>
+          </div>
+          <div className="min-w-0">
+            <span className="text-neutral-400 font-bold block mb-1">Department</span>
+            <p className="font-bold text-neutral-900 text-sm break-words">{employee.department || 'Not set'}</p>
+          </div>
+          <div className="col-span-2">
+            <div className="grid grid-cols-3 gap-6">
+              <div className="min-w-0">
+                <span className="text-neutral-400 font-bold block mb-1">Position</span>
+                <p className="font-bold text-neutral-900 text-sm break-words">{employee.position || 'Not set'}</p>
+              </div>
+              <div className="min-w-0">
+                <span className="text-neutral-400 font-bold block mb-1">Employment Type</span>
+                <p className="font-bold text-neutral-900 text-sm break-words">{employee.employmentType || 'Not set'}</p>
+              </div>
+              <div className="min-w-0">
+                <span className="text-neutral-400 font-bold block mb-1">Hire Date</span>
+                <p className="font-bold text-neutral-900 text-sm break-words">{employee.hireDate || 'Not set'}</p>
+              </div>
+            </div>
+          </div>
+          <div className="col-span-1 min-w-0">
+            <span className="text-neutral-400 font-bold block mb-1">Reporting Manager</span>
+            <p className="font-bold text-neutral-900 text-sm break-words">{employee.reportingManager || 'Not set'}</p>
+          </div>
+          <div className="col-span-1 min-w-0">
+            <span className="text-neutral-400 font-bold block mb-1">Employment Status</span>
+            <p className="font-bold text-neutral-900 text-sm">{employee.status || 'Not set'}</p>
+          </div>
+        </div>
+
+        {/* sm and above */}
+        <div className="hidden sm:grid sm:grid-cols-2 md:grid-cols-3 gap-6 text-xs">
           {fields.map((f) => (
             <div key={f.name}>
               <span className="text-neutral-400 font-bold block mb-1">{f.label}</span>

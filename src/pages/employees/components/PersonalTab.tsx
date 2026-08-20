@@ -113,7 +113,48 @@ export function PersonalTab({ employee }: PersonalTabProps) {
             Edit Info
           </button>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 text-xs">
+        {/* Mobile (sm and below) grouped layout */}
+        <div className="grid grid-cols-2 gap-6 text-xs sm:hidden">
+          <div>
+            <span className="text-neutral-400 font-bold block mb-1">First Name</span>
+            <p className="font-bold text-neutral-900 text-sm break-words">{employee.firstName || 'Not set'}</p>
+          </div>
+          <div>
+            <span className="text-neutral-400 font-bold block mb-1">Last Name</span>
+            <p className="font-bold text-neutral-900 text-sm break-words">{employee.lastName || 'Not set'}</p>
+          </div>
+          <div className="col-span-2">
+            <span className="text-neutral-400 font-bold block mb-1">Email Address</span>
+            <p className="font-bold text-neutral-900 text-sm break-words">{employee.email || 'Not set'}</p>
+          </div>
+          <div className="col-span-2">
+            <div className="grid grid-cols-3 gap-6">
+              <div className="min-w-0">
+                <span className="text-neutral-400 font-bold block mb-1">Phone</span>
+                <p className="font-bold text-neutral-900 text-sm break-words">{employee.phoneNumber || 'Not set'}</p>
+              </div>
+              <div>
+                <span className="text-neutral-400 font-bold block mb-1">Gender</span>
+                <p className="font-bold text-neutral-900 text-sm">{employee.gender || 'Not set'}</p>
+              </div>
+              <div>
+                <span className="text-neutral-400 font-bold block mb-1">Date of Birth</span>
+                <p className="font-bold text-neutral-900 text-sm break-words">{employee.dob || 'Not set'}</p>
+              </div>
+            </div>
+          </div>
+          <div className="col-span-1 min-w-0">
+            <span className="text-neutral-400 font-bold block mb-1">Home Address</span>
+            <p className="font-bold text-neutral-900 text-sm break-words">{employee.address || 'Not set'}</p>
+          </div>
+          <div className="col-span-1 min-w-0">
+            <span className="text-neutral-400 font-bold block mb-1">Emergency Contact</span>
+            <p className="font-bold text-neutral-900 text-sm break-words">{employee.emergencyContact || 'Not set'}</p>
+          </div>
+        </div>
+
+        {/* sm and above */}
+        <div className="hidden sm:grid sm:grid-cols-2 md:grid-cols-3 gap-6 text-xs">
           {fields.map((f) => (
             <div key={f.name} className={f.colSpan ? 'sm:col-span-2' : ''}>
               <span className="text-neutral-400 font-bold block mb-1">{f.label}</span>

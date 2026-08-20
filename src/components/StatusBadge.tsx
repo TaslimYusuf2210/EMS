@@ -11,7 +11,7 @@ const statusVariantMap: Record<EmployeeStatus, 'active' | 'inactive' | 'probatio
   OnLeave: 'inactive',
 };
 
-export function StatusBadge({ status }: { status: string }) {
+export function StatusBadge({ status, className }: { status: string; className?: string }) {
   const variant = statusVariantMap[status as EmployeeStatus] ?? 'default';
-  return <Badge variant={variant}>{status}</Badge>;
+  return <Badge variant={variant} className={className}>{status}</Badge>;
 }

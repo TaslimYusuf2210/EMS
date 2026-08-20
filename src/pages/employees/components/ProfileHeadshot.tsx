@@ -74,7 +74,7 @@ export function ProfileHeadshot({ employee }: ProfileHeadshotProps) {
   };
 
   return (
-    <div className="relative flex-none h-60 sm:h-72 w-full sm:w-52 xl:w-60 rounded-4xl overflow-hidden border border-neutral-200 bg-neutral-950/5">
+    <div className="relative flex-none h-60 sm:h-72 w-52 xl:w-60 rounded-4xl overflow-hidden border border-neutral-200 bg-neutral-950/5">
       {headshotUrl ? (
         <img
           src={headshotUrl}

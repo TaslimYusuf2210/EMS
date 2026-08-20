@@ -169,18 +169,18 @@ export function BankTab({ employee }: BankTabProps) {
             Configure Bank Account
           </button>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-xs">
-          <div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-6 text-xs">
+          <div className="min-w-0">
             <span className="text-neutral-400 font-bold block mb-1">Bank Name</span>
-            <p className="font-bold text-neutral-900 text-sm">{b.bankName || 'Not configured'}</p>
+            <p className="font-bold text-neutral-900 text-sm break-words">{b.bankName || 'Not configured'}</p>
           </div>
-          <div>
-            <span className="text-neutral-400 font-bold block mb-1">Account Name</span>
-            <p className="font-bold text-neutral-900 text-sm">{b.accountName || 'Not configured'}</p>
-          </div>
-          <div>
+          <div className="min-w-0">
             <span className="text-neutral-400 font-bold block mb-1">Account Number</span>
-            <p className="font-bold text-neutral-900 text-sm">{b.accountNumber || 'Not configured'}</p>
+            <p className="font-bold text-neutral-900 text-sm break-words">{b.accountNumber || 'Not configured'}</p>
+          </div>
+          <div className="col-span-2 sm:col-span-1 min-w-0">
+            <span className="text-neutral-400 font-bold block mb-1">Account Name</span>
+            <p className="font-bold text-neutral-900 text-sm break-words">{b.accountName || 'Not configured'}</p>
           </div>
         </div>
       </div>

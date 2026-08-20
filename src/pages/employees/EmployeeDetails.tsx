@@ -86,7 +86,7 @@ export default function EmployeeDetails() {
                     <span className="text-[11px] uppercase tracking-[0.3em] text-neutral-400">{employee.department}</span>
                   </div>
                 </div>
-                <StatusBadge status={employee.status} />
+                <StatusBadge status={employee.status} className="self-start" />
               </div>
               <div className="mt-4 flex flex-wrap items-center gap-2">
                 <span className="rounded-full bg-neutral-100 text-neutral-700 px-3 py-1 text-xs font-semibold">ID: {employee.id}</span>
@@ -109,7 +109,7 @@ export default function EmployeeDetails() {
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
+        <div className="mt-6 grid grid-cols-2 xl:grid-cols-5 gap-4">
           <div className="rounded-3xl bg-surface-subtle border border-neutral-100 p-5 min-w-0">
             <p className="text-[11px] uppercase tracking-[0.24em] text-neutral-400">Email</p>
             <p className="mt-3 text-sm font-semibold text-neutral-950 break-words">{employee.email}</p>
@@ -132,7 +132,7 @@ export default function EmployeeDetails() {
           </div>
         </div>
 
-        <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="mt-6 grid grid-cols-2 gap-4">
           <div className="rounded-3xl border border-neutral-100 p-5 bg-neutral-50 min-w-0">
             <p className="text-[11px] uppercase tracking-[0.24em] text-neutral-400">Address</p>
             <p className="mt-3 text-sm font-semibold text-neutral-950 break-words">{employee.address || 'No address provided'}</p>
