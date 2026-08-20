@@ -131,7 +131,7 @@ export default function CreateAccount() {
   return (
     <div className="flex h-screen">
       {/* Left column: SVG Illustration */}
-      <div className="hidden md:flex w-1/2 bg-indigo-50/50 p-8 md:pr-16 flex-col items-center justify-center relative overflow-hidden border-r border-slate-100">
+      <div className="hidden md:flex w-1/2 bg-indigo-50/50 p-8 md:pr-6 lg:pr-16 flex-col items-center justify-center relative overflow-hidden border-r border-slate-100">
         <div className="absolute top-8 left-8 flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-[#faedcd] flex items-center justify-center text-neutral-950 font-bold text-lg">S</div>
           <span className="font-bold text-slate-800 text-lg tracking-tight">StaffSync</span>
@@ -148,8 +148,8 @@ export default function CreateAccount() {
       </div>
 
       {/* Right column: Form */}
-      <div className="w-full md:w-1/2 p-8 md:py-16 md:pr-12 md:pl-20 flex flex-col overflow-y-auto">
-        <div className="flex-1">
+      <div className="w-full md:w-1/2 p-8 sm:p-4 md:py-16 md:pr-6 md:pl-10 lg:pr-12 lg:pl-20 flex flex-col overflow-y-auto">
+        <div className="m-auto w-full sm:w-[75%] md:flex-1 md:m-0 md:w-full sm:bg-white md:bg-transparent rounded-none sm:rounded-3xl md:rounded-none shadow-none sm:shadow-xl md:shadow-none px-0 sm:px-6 md:px-0 py-0 sm:py-10 md:py-0">
           {!isSuccessStep && (
             <>
               <h2 className="text-3xl font-extrabold text-slate-900 tracking-tight mb-2">Join us,</h2>
