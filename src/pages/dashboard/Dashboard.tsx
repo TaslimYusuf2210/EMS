@@ -110,36 +110,42 @@ export default function Dashboard() {
               <span className="text-xs text-neutral-300">Status distribution will appear here once employees are added.</span>
             </div>
           ) : (
-            <div className="flex items-center gap-8">
-              <ResponsiveContainer width="55%" height={300}>
-                <PieChart>
-                  <Pie
-                    data={pieData}
-                    cx="50%"
-                    cy="50%"
-                    innerRadius={0}
-                    outerRadius={120}
-                    dataKey="value"
-                    stroke="none"
-                    label={({ value }) => {
-                      const pct = pieTotal > 0 ? Math.round((value / pieTotal) * 100) : 0;
-                      return pct > 0 ? `${pct}%` : '';
-                    }}
-                  >
-                    {pieData.map((entry) => (
-                      <Cell key={entry.name} fill={STATUS_COLORS[entry.name] ?? '#e5e5e5'} />
-                    ))}
-                  </Pie>
-                  <Tooltip formatter={(value: any, name: any) => [value, String(name).charAt(0).toUpperCase() + String(name).slice(1)]} />
-                </PieChart>
-              </ResponsiveContainer>
-              <div className="flex flex-col gap-2 text-[11px] font-bold text-neutral-500 shrink-0">
-                {pieData.map((entry) => (
-                  <span key={entry.name} className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: STATUS_COLORS[entry.name] }} />
-                    {entry.name.charAt(0).toUpperCase() + entry.name.slice(1)}: {entry.value}
-                  </span>
-                ))}
+            <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10">
+              <div className="w-full md:w-[55%] flex justify-center">
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={pieData}
+                      cx="50%"
+                      cy="50%"
+                      innerRadius={0}
+                      outerRadius={120}
+                      dataKey="value"
+                      stroke="none"
+                      label={({ value }) => {
+                        const pct = pieTotal > 0 ? Math.round((value / pieTotal) * 100) : 0;
+                        return pct > 0 ? `${pct}%` : '';
+                      }}
+                    >
+                      {pieData.map((entry) => (
+                        <Cell key={entry.name} fill={STATUS_COLORS[entry.name] ?? '#e5e5e5'} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value: any, name: any) => [value, String(name).charAt(0).toUpperCase() + String(name).slice(1)]} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-[11px] font-bold text-neutral-500 shrink-0 md:flex-col md:flex-nowrap md:justify-start md:gap-2">
+                {pieData.map((entry) => {
+                  const pct = pieTotal > 0 ? Math.round((entry.value / pieTotal) * 100) : 0;
+                  const label = entry.name.charAt(0).toUpperCase() + entry.name.slice(1);
+                  return (
+                    <span key={entry.name} className="flex items-center gap-2">
+                      <span className="w-3 h-3 rounded-sm shrink-0" style={{ backgroundColor: STATUS_COLORS[entry.name] }} />
+                      {label}: {entry.value} ({pct}%)
+                    </span>
+                  );
+                })}
               </div>
             </div>
           )}
