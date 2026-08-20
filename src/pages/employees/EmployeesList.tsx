@@ -74,9 +74,9 @@ export default function EmployeesList() {
       />
 
       {/* FILTER & SEARCH PANEL */}
-      <div className="bg-white border border-neutral-200 rounded-2xl p-4 flex flex-col md:flex-row gap-4">
+      <div className="bg-white border border-neutral-200 rounded-2xl p-4 flex flex-wrap gap-4">
         {/* Search Input */}
-        <div className="flex-1 relative">
+        <div className="flex-1 basis-full min-w-0 relative">
           <input
             type="text"
             placeholder="Search by name, ID or position..."
@@ -97,7 +97,7 @@ export default function EmployeesList() {
           </svg>
         </div>
         {/* Dept Selector */}
-        <div className="w-full md:w-48">
+        <div className="flex-1 basis-0 min-w-0 md:basis-auto md:w-48 md:flex-none">
           <select
             value={selectedDept}
             onChange={(e) => {
@@ -113,7 +113,7 @@ export default function EmployeesList() {
           </select>
         </div>
         {/* Status Selector */}
-        <div className="w-full md:w-40">
+        <div className="flex-1 basis-0 min-w-0 md:basis-auto md:w-40 md:flex-none">
           <select
             value={selectedStatus}
             onChange={(e) => {
