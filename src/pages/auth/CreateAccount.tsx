@@ -131,7 +131,7 @@ export default function CreateAccount() {
   return (
     <div className="flex h-screen">
       {/* Left column: SVG Illustration */}
-      <div className="w-1/2 bg-indigo-50/50 p-8 md:pr-16 flex flex-col items-center justify-center relative overflow-hidden border-r border-slate-100">
+      <div className="hidden md:flex w-1/2 bg-indigo-50/50 p-8 md:pr-16 flex-col items-center justify-center relative overflow-hidden border-r border-slate-100">
         <div className="absolute top-8 left-8 flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg bg-[#faedcd] flex items-center justify-center text-neutral-950 font-bold text-lg">S</div>
           <span className="font-bold text-slate-800 text-lg tracking-tight">StaffSync</span>
@@ -148,7 +148,7 @@ export default function CreateAccount() {
       </div>
 
       {/* Right column: Form */}
-      <div className="w-1/2 p-8 md:py-16 md:pr-12 md:pl-20 flex flex-col overflow-y-auto">
+      <div className="w-full md:w-1/2 p-8 md:py-16 md:pr-12 md:pl-20 flex flex-col overflow-y-auto">
         <div className="flex-1">
           {!isSuccessStep && (
             <>
