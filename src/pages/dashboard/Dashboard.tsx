@@ -112,15 +112,15 @@ export default function Dashboard() {
           ) : (
             <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10">
               <div className="w-full md:w-[55%] overflow-x-auto">
-                <div className="min-w-75 flex justify-center">
-                  <ResponsiveContainer width="100%" height={300}>
+                <div className="min-w-80 flex justify-center">
+                  <ResponsiveContainer width="100%" height={260}>
                   <PieChart>
                     <Pie
                       data={pieData}
                       cx="50%"
                       cy="50%"
                       innerRadius={0}
-                      outerRadius={120}
+                      outerRadius={105}
                       dataKey="value"
                       stroke="none"
                       label={({ value }) => {
