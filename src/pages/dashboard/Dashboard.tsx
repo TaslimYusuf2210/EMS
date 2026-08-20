@@ -111,8 +111,9 @@ export default function Dashboard() {
             </div>
           ) : (
             <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10">
-              <div className="w-full md:w-[55%] flex justify-center">
-                <ResponsiveContainer width="100%" height={300}>
+              <div className="w-full md:w-[55%] overflow-x-auto">
+                <div className="min-w-75 flex justify-center">
+                  <ResponsiveContainer width="100%" height={300}>
                   <PieChart>
                     <Pie
                       data={pieData}
@@ -133,7 +134,8 @@ export default function Dashboard() {
                     </Pie>
                     <Tooltip formatter={(value: any, name: any) => [value, String(name).charAt(0).toUpperCase() + String(name).slice(1)]} />
                   </PieChart>
-                </ResponsiveContainer>
+                  </ResponsiveContainer>
+                </div>
               </div>
               <div className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-[11px] font-bold text-neutral-500 shrink-0 md:flex-col md:flex-nowrap md:justify-start md:gap-2">
                 {pieData.map((entry) => {
