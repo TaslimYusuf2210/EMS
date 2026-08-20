@@ -112,7 +112,7 @@ export default function Dashboard() {
           ) : (
             <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10">
               <div className="w-full md:w-[55%] overflow-x-auto">
-                <div className="min-w-80 flex justify-center">
+                <div className="min-w-82.5 flex justify-center">
                   <ResponsiveContainer width="100%" height={260}>
                   <PieChart>
                     <Pie
