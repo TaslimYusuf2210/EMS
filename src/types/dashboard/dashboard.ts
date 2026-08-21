@@ -21,6 +21,7 @@ export interface RecentEmployee {
   status: string;
   hireDate: string;
   photoUrl: string | null;
+  professionalHeadshot?: string | null;
 }
 
 export interface DepartmentOverview {

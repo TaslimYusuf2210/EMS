@@ -207,7 +207,7 @@ export default function Dashboard() {
                 <TableRow key={emp.id}>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <Avatar firstName={emp.firstName} lastName={emp.lastName} photoUrl={emp.photoUrl} />
+                      <Avatar firstName={emp.firstName} lastName={emp.lastName} photoUrl={emp.photoUrl} professionalHeadshot={emp.professionalHeadshot} />
                       <div>
                         <Link to={`/dashboard/employees/${emp.id}`} className="font-bold text-neutral-900 hover:underline">
                           {emp.firstName} {emp.lastName}

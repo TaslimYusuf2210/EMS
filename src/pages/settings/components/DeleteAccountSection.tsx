@@ -71,7 +71,7 @@ export default function DeleteAccountSection() {
           <h3 className="text-lg font-bold text-neutral-900 text-center">Delete account?</h3>
           <p className="text-sm text-neutral-500 mt-1.5 text-center">
             This action is <span className="font-bold text-red-600">permanent and irreversible</span>. You'll lose your
-            company, all employees, departments, documents, payroll history and settings — there is no undo and no
+            company, all employees, departments, documents, payroll history and settings. There is no undo and no
             recovery.
           </p>
 

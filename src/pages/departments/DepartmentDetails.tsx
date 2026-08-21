@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useGetDepartmentById } from "@/hooks/useQuery/useGetDepartmentById";
 import { DeleteDepartmentDialog } from "./components/DeleteDepartmentDialog";
+import { Avatar } from "../../components/ui/avatar";
 
 export default function DepartmentDetails() {
   const { id } = useParams<{ id: string | undefined }>();
@@ -107,16 +108,8 @@ export default function DepartmentDetails() {
                     className="hover:bg-neutral-50/50hover:bg-surface-warm/30 transition-all"
                   >
                                         <td className="p-4 flex items-center gap-3">
-                                            <div className="w-8 h-8 rounded-full bg-neutral-100bg-surface-warm text-neutral-950 font-bold flex items-center justify-center overflow-hidden shrink-0">
-                                                {emp.photoUrl ? (
-                          <img
-                            className="w-full h-full object-cover grayscale"
-                            src={emp.photoUrl}
-                            alt=""
-                          />
-                        ) : (
-                          `${emp.firstName[0]}${emp.lastName[0]}`
-                        )}                      </div>                      <div>
+                                            <Avatar firstName={emp.firstName} lastName={emp.lastName} photoUrl={emp.photoUrl} professionalHeadshot={emp.professionalHeadshot} />
+                      <div>
                                                 <p className="font-bold text-neutral-900">
                           {emp.firstName} {emp.lastName}
                         </p>                        <p className="text-[10px] text-neutral-400">

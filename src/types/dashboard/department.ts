@@ -50,6 +50,7 @@ export interface DepartmentMember {
   status: string;
   hireDate: string;
   photoUrl?: string;
+  professionalHeadshot?: string;
 }
 
 export interface SingleDepartmentData {
