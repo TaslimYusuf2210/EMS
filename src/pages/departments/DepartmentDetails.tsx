@@ -134,7 +134,7 @@ export default function DepartmentDetails() {
                         to={`/dashboard/employees/${emp.id}`}
                         className="px-2.5 py-1 bg-neutral-100 hover:bg-neutral-200bg-surface-warm text-[10px] font-bold rounded-lg text-neutral-800 transition-all"
                       >
-                                                View Profile                      </Link>                    </td>                  </tr>
+                                                <span className="md:hidden">View</span><span className="hidden md:inline">View Profile</span>                      </Link>                    </td>                  </tr>
                 ))}              </tbody>            </table>          </div>
         )}      </div>
       {showDeleteDialog && (
