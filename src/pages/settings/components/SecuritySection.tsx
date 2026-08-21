@@ -5,6 +5,7 @@ import { Hourglass } from 'ldrs/react'
 import 'ldrs/react/Hourglass.css'
 import { PasswordStrength } from '../../auth/components/PasswordStrength';
 import { useChangePassword } from '../../../hooks/useMutation/useChangePassword';
+import DeleteAccountSection from './DeleteAccountSection';
 
 const securitySchema = z
   .object({
@@ -48,6 +49,7 @@ export default function SecuritySection() {
   };
 
   return (
+    <>
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <h3 className="font-extrabold text-sm text-neutral-900 uppercase tracking-wider border-b border-neutral-100 pb-3">
         Change Password
@@ -111,6 +113,8 @@ export default function SecuritySection() {
           )}
         </button>
       </div>
-    </form>
+      </form>
+      <DeleteAccountSection />
+    </>
   );
 }

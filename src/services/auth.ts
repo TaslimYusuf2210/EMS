@@ -36,6 +36,11 @@ export const changePassword = (payload: ChangePasswordPayload) =>
     data: payload,
 });
 
+export const deleteAccount = () =>
+  request<{ message: string }>('/auth/account', {
+    method: 'DELETE',
+  });
+
 export type ForgotPasswordPayload = { email: string };
 
 export const forgotPassword = (payload: ForgotPasswordPayload) => 
