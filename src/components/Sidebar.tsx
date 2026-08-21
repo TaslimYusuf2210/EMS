@@ -127,7 +127,7 @@ export default function Sidebar({ onClose, isDrawer = false }: SidebarProps) {
   }
   return (
     <div
-      className={`flex flex-col h-full bg-white border-r border-neutral-200 transition-all duration-300 ease-in-out
+      className={`flex flex-col h-full overflow-y-auto bg-white border-r border-neutral-200 transition-all duration-300 ease-in-out
         lg:w-64 lg:p-5 lg:sticky lg:top-0 lg:left-0 lg:relative lg:z-0
         md:fixed md:top-0 md:left-0 md:h-screen md:w-20 md:hover:w-64 md:p-0 md:overflow-hidden group md:z-50
         ${isDrawer ? "p-5" : "max-md:hidden"}`}

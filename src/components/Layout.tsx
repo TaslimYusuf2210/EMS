@@ -52,7 +52,7 @@ export default function Layout() {
 
       {/* Drawer Sidebar - sm/below only, shown when burger clicked */}
       {mobileSidebarOpen && (
-        <aside className="fixed top-0 left-0 h-screen w-[85%] max-w-xs z-50 lg:hidden">
+        <aside className="fixed top-0 left-0 h-dvh w-[85%] max-w-xs z-50 lg:hidden">
           <Sidebar isDrawer={true} onClose={() => setMobileSidebarOpen(false)} />
         </aside>
       )}
