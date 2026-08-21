@@ -5,60 +5,32 @@ import { useDeleteAccount } from '../../../hooks/useMutation/useDeleteAccount';
 import { Hourglass } from 'ldrs/react';
 import 'ldrs/react/Hourglass.css';
 
-/**
- * Generates a random 8-character confirmation code containing at least one
- * letter, one number and one special character, then shuffles the order.
- */
-function generateDeleteCode(): string {
-  const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz';
-  const numbers = '23456789';
-  const specials = '!@#$%&*+=?';
-  const all = letters + numbers + specials;
-  const pick = (set: string) => set[Math.floor(Math.random() * set.length)];
-
-  const code = [
-    pick(letters),
-    pick(numbers),
-    pick(specials),
-    pick(all),
-    pick(all),
-    pick(all),
-    pick(all),
-    pick(all),
-  ];
-
-  // Fisher–Yates shuffle so the guaranteed types aren't always at the front
-  for (let i = code.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [code[i], code[j]] = [code[j], code[i]];
-  }
-
-  return code.join('');
-}
-
 export default function DeleteAccountSection() {
   const navigate = useNavigate();
   const { mutateAsync: deleteAccountMutation, isPending: isDeleting } = useDeleteAccount();
   const [open, setOpen] = useState(false);
-  const [confirmCode, setConfirmCode] = useState('');
-  const [typedCode, setTypedCode] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const openDialog = () => {
-    setConfirmCode(generateDeleteCode());
-    setTypedCode('');
+    setPassword('');
+    setShowPassword(false);
+    setError(null);
     setOpen(true);
   };
 
-  const matches = typedCode === confirmCode;
+  const canSubmit = password.trim().length > 0;
 
   const handleDelete = async () => {
+    setError(null);
     try {
-      await deleteAccountMutation();
+      await deleteAccountMutation({ password });
       localStorage.removeItem('token');
       sessionStorage.removeItem('token');
       navigate('/login');
-    } catch {
-      // Error toast is handled by the mutation hook
+    } catch (err: any) {
+      setError(err?.message || 'Failed to delete account. Please try again.');
     }
   };
 
@@ -103,22 +75,36 @@ export default function DeleteAccountSection() {
             recovery.
           </p>
 
-          <p className="text-xs font-bold text-neutral-700 mt-4">Type this code to confirm:</p>
-          <div className="mt-1.5 bg-neutral-100 border border-neutral-200 rounded-xl py-2.5 text-center font-mono text-lg font-bold tracking-[0.3em] text-neutral-900 select-all">
-            {confirmCode}
+          <label className="text-xs font-bold text-neutral-700 mt-4 block">Enter your password to confirm</label>
+          <div className="relative mt-1.5">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Your password"
+              autoFocus
+              className="w-full py-2.5 px-3.5 pr-10 rounded-xl border border-neutral-200 text-sm focus:outline-none focus:border-red-400"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((s) => !s)}
+              tabIndex={-1}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-neutral-400 hover:text-neutral-600 cursor-pointer"
+            >
+              {showPassword ? (
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                </svg>
+              ) : (
+                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                </svg>
+              )}
+            </button>
           </div>
-          <input
-            type="text"
-            value={typedCode}
-            onChange={(e) => setTypedCode(e.target.value)}
-            placeholder="Enter the 8-character code"
-            maxLength={8}
-            autoFocus
-            className="w-full mt-3 py-2.5 px-3.5 rounded-xl border border-neutral-200 text-sm font-mono text-center tracking-widest focus:outline-none focus:border-red-400"
-          />
-          {typedCode.length > 0 && !matches && (
-            <p className="text-red-500 text-[10px] mt-1">Code doesn't match — double-check and try again.</p>
-          )}
+          {error && <p className="text-red-500 text-[10px] mt-1">{error}</p>}
 
           <div className="flex gap-2 justify-end pt-6">
             <button
@@ -132,7 +118,7 @@ export default function DeleteAccountSection() {
             <button
               type="button"
               onClick={handleDelete}
-              disabled={!matches || isDeleting}
+              disabled={!canSubmit || isDeleting}
               className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-xl text-xs font-bold transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               {isDeleting ? (

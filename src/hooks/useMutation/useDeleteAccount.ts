@@ -4,7 +4,7 @@ import { toast } from 'sonner';
 
 export const useDeleteAccount = () => {
   return useMutation({
-    mutationFn: deleteAccount,
+    mutationFn: (payload: { password: string }) => deleteAccount(payload),
     onSuccess: () => {
       toast.success('Account deleted successfully');
     },
