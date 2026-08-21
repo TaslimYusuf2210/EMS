@@ -82,7 +82,7 @@ export default function CompanySection() {
         Company Information
       </h3>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block mb-1">
             Company Name
@@ -133,7 +133,8 @@ export default function CompanySection() {
         </div>
         <div>
           <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block mb-1">
-            Description / Organization Type
+            <span className="sm:hidden">Organization Type</span>
+            <span className="hidden sm:inline">Description / Organization Type</span>
           </label>
           <select
             {...register('companyDescription')}
@@ -166,7 +167,7 @@ export default function CompanySection() {
       {/* ─── Address Section ──────────────────────────────────────── */}
       <p className="text-xs font-bold text-neutral-400 uppercase tracking-wider pt-2">Address</p>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block mb-1">
             State
@@ -215,7 +216,7 @@ export default function CompanySection() {
             <p className="text-red-500 text-[10px] mt-1">{errors.companySettlement.message}</p>
           )}
         </div>
-        <div>
+        <div className="col-span-2">
           <label className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block mb-1">
             Street Address
           </label>

@@ -1,10 +1,20 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import {useGetCurrentUser} from "../hooks/useQuery/useGetCurrentUser";
 
 export default function Layout() {
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+
+  // Lock background scroll while the mobile drawer is open
+  useEffect(() => {
+    if (!mobileSidebarOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [mobileSidebarOpen]);
 
   const { isLoading: isFetchingUser } = useGetCurrentUser();
 

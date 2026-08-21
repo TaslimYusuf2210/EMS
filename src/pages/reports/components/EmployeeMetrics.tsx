@@ -10,9 +10,9 @@ interface ReportCardProps {
 
 export function ReportCard({ label, value }: ReportCardProps) {
   return (
-    <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm">
+    <div className="bg-white border border-neutral-200 rounded-2xl p-5 shadow-sm min-w-0">
       <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-wider block">{label}</span>
-      <p className="text-3xl font-black text-neutral-950 mt-2">{value}</p>
+      <p className="text-2xl sm:text-3xl font-black text-neutral-950 mt-2">{value}</p>
     </div>
   );
 }
@@ -33,7 +33,7 @@ export function EmployeeMetrics({ employees, departments }: EmployeeMetricsProps
   return (
     <section className="space-y-4">
       <h2 className="text-sm font-extrabold text-neutral-900 uppercase tracking-wider">Employee Reports</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         <ReportCard label="Total Employees" value={total} />
         <ReportCard label="Active" value={active} />
         <ReportCard label="Inactive / Departed" value={inactive} />

@@ -22,7 +22,7 @@ export function SalaryMetrics() {
       ) : isSalarySummaryError ? (
         <div className="text-center text-red-500 text-xs py-6">Failed to load salary data.</div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-4">
           <ReportCard label="Total Monthly Payroll" value={`₦${totalMonthlyPayroll.toLocaleString()}`} />
           <ReportCard label="Average Compensation" value={`₦${averageCompensation.toLocaleString()}`} />
           <ReportCard label="Highest Paid" value={`₦${highestPaid.toLocaleString()}`} />
