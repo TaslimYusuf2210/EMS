@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useFormContext } from 'react-hook-form';
 import type { RegisterFormValues } from '../../schemas/registerSchema';
 import { PasswordStrength } from '../PasswordStrength';
+import { AuthInput } from '../AuthInput';
 
 export function PasswordStep() {
   const { register, formState: { errors }, watch } = useFormContext<RegisterFormValues>();
@@ -24,39 +25,23 @@ export function PasswordStep() {
 
   return (
     <div className="space-y-6">
-      <div className="relative group">
-        <input type={showPassword ? 'text' : 'password'} id="password" placeholder="" {...register('password')}
-          className={`peer w-full py-3 px-10 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
-            errors.password ? 'border-red-400 focus:border-red-500' : 'border-slate-200 focus:border-indigo-600'
-          }`}
-        />
-        <label htmlFor="password" className="absolute left-4 -top-2.5 text-xs text-slate-500 transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-indigo-600">
-          Password
-        </label>
-        <button type="button" onClick={() => setShowPassword(!showPassword)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
-        >
-          {showPassword ? <EyeOffIcon /> : <EyeIcon />}
-        </button>
-        {errors.password && <p className="text-red-500 text-xs mt-1 font-medium">{errors.password.message}</p>}
-        <PasswordStrength value={passwordValue} />
-      </div>
-      <div className="relative group">
-        <input type={showConfirm ? 'text' : 'password'} id="confirmPassword" placeholder="" {...register('confirmPassword')}
-          className={`peer w-full py-3 px-10 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
-            errors.confirmPassword ? 'border-red-400 focus:border-red-500' : 'border-slate-200 focus:border-indigo-600'
-          }`}
-        />
-        <label htmlFor="confirmPassword" className="absolute left-4 -top-2.5 text-xs text-slate-500 transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-indigo-600">
-          Confirm Password
-        </label>
-        <button type="button" onClick={() => setShowConfirm(!showConfirm)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
-        >
-          {showConfirm ? <EyeOffIcon /> : <EyeIcon />}
-        </button>
-        {errors.confirmPassword && <p className="text-red-500 text-xs mt-1 font-medium">{errors.confirmPassword.message}</p>}
-      </div>
+      <AuthInput
+        type={showPassword ? 'text' : 'password'}
+        label="Password"
+        error={errors.password?.message}
+        trailing={showPassword ? <EyeOffIcon /> : <EyeIcon />}
+        trailingAction={() => setShowPassword(!showPassword)}
+        {...register('password')}
+      />
+      <PasswordStrength value={passwordValue} />
+      <AuthInput
+        type={showConfirm ? 'text' : 'password'}
+        label="Confirm Password"
+        error={errors.confirmPassword?.message}
+        trailing={showConfirm ? <EyeOffIcon /> : <EyeIcon />}
+        trailingAction={() => setShowConfirm(!showConfirm)}
+        {...register('confirmPassword')}
+      />
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import type { Department } from "../../types/dashboard/department";
 import { useGetDepartments } from "../../hooks/useQuery/useGetDepartments";
 import { AddDepartmentDialog } from "./components/AddDepartmentDialog";
@@ -15,6 +15,15 @@ export default function DepartmentsList() {
   const [showAddDialog, setShowAddDialog] = useState(false);
   const [editingDep, setEditingDep] = useState<Department | null>(null);
   const [deletingDep, setDeletingDep] = useState<Department | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Open the Add Department dialog when arriving via the dashboard quick action (?add=1)
+  useEffect(() => {
+    if (searchParams.get('add') === '1') {
+      setShowAddDialog(true);
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
   return (
     <div className="space-y-6">
       {" "}

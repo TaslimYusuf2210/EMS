@@ -23,7 +23,7 @@ export function ReviewStep() {
       <div className="flex flex-col gap-1 text-sm">
         <label className="flex items-center text-slate-600 font-medium cursor-pointer">
           <input type="checkbox" {...register('agreeTerms')}
-            className="w-4 h-4 rounded text-indigo-600 border-slate-300 focus:ring-indigo-500 mr-2"
+            className="w-4 h-4 rounded text-brand-deep border-slate-300 focus:ring-brand-deep mr-2"
           />
           I agree to the Terms & Conditions
         </label>

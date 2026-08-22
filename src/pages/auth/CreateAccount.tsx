@@ -59,7 +59,7 @@ export default function CreateAccount() {
       description: '',
       password: '',
       confirmPassword: '',
-      agreeTerms: true,
+      agreeTerms: false,
     },
   });
 
@@ -178,9 +178,9 @@ export default function CreateAccount() {
                     ← Back
                   </button>
                   <button type="button" onClick={handleNext} disabled={isPending || isSendingOtp || isVerifyingOtp}
-                    className="px-6 py-2.5 bg-[#faedcd] hover:bg-[#ccd5ae] text-neutral-950 font-bold rounded-xl shadow-lg shadow-indigo-100 hover:shadow-indigo-200 active:scale-[0.98] transition-all duration-150 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="btn-brand px-6 py-2.5 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                   >
-                    {step === 0 && isSendingOtp ? <Hourglass size="18" color="black" /> : step === 1 && isVerifyingOtp ? <Hourglass size="18" color="black" /> : isLastStep && isPending ? <Hourglass size="18" color="black" /> : isLastStep ? 'Create Account' : 'Next →'}
+                    {step === 0 && isSendingOtp ? <Hourglass size="18" color="white" /> : step === 1 && isVerifyingOtp ? <Hourglass size="18" color="white" /> : isLastStep && isPending ? <Hourglass size="18" color="white" /> : isLastStep ? 'Create Account' : 'Next →'}
                   </button>
                 </div>
               )}
@@ -190,7 +190,7 @@ export default function CreateAccount() {
           {!isSuccessStep && (
             <div className="mt-6 text-center text-sm text-slate-600">
               Already have an account?{' '}
-              <Link to="/login" className="text-indigo-600 hover:text-indigo-700 font-bold hover:underline">Click here</Link>
+              <Link to="/login" className="text-brand-deep hover:text-brand font-bold hover:underline">Click here</Link>
             </div>
           )}
         </div>

@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { PageHeader } from '../../components/PageHeader';
 import { Avatar } from '../../components/ui/avatar';
 import { StatusBadge } from '../../components/StatusBadge';
@@ -20,6 +20,15 @@ export default function EmployeesList() {
   const [sortBy, setSortBy] = useState<'name' | 'dept' | 'joined'>('name');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  // Open the Add Employee dialog when arriving via the dashboard quick action (?add=1)
+  useEffect(() => {
+    if (searchParams.get('add') === '1') {
+      setShowAddDialog(true);
+      setSearchParams({}, { replace: true });
+    }
+  }, [searchParams, setSearchParams]);
 
   const {data: employeesData, isLoading: isEmployeesLoading, isError: isEmployeesError} = useGetEmployees({
     page: currentPage,

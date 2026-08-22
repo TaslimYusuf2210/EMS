@@ -145,19 +145,6 @@ export default function Sidebar({ onClose, isDrawer = false }: SidebarProps) {
         </span>
       </div>
 
-      {/* Org Name - Hidden on mobile/tablet collapsed state */}
-      <div className={`${isDrawer ? "flex" : "hidden md:hidden md:group-hover:flex lg:flex"} my-5 bg-[#fefae0] border border-neutral-100 rounded-xl p-3 items-center justify-between`}>
-        <div>
-          <h4 className="font-bold text-xs text-neutral-900">
-            {currentUser?.data?.company?.name}
-          </h4>
-          <p className="text-[10px] text-neutral-400 font-medium mt-0.5">
-            {currentUser?.data?.company?.description}
-          </p>
-        </div>
-        <div className="w-2.5 h-2.5 bg-[#ccd5ae] rounded-full" />
-      </div>
-
       {/* Links list */}
       <nav className="flex-1 space-y-1.5 mt-2 md:space-y-3 md:px-3.5 md:mt-4 md:overflow-y-auto">
         <span className={`${isDrawer ? "block" : "hidden md:hidden md:group-hover:block lg:block"} text-[10px] font-bold text-neutral-400 uppercase tracking-wider mb-2 px-2`}>
@@ -198,6 +185,19 @@ export default function Sidebar({ onClose, isDrawer = false }: SidebarProps) {
           );
         })}
       </nav>
+
+      {/* Org Name - immediately above logout */}
+      <div className={`${isDrawer ? "flex" : "hidden md:hidden md:group-hover:flex lg:flex"} mt-5 mb-3 bg-[#fefae0] border border-neutral-100 rounded-xl p-3 items-center justify-between`}>
+        <div>
+          <h4 className="font-bold text-xs text-neutral-900">
+            {currentUser?.data?.company?.name}
+          </h4>
+          <p className="text-[10px] text-neutral-400 font-medium mt-0.5">
+            {currentUser?.data?.company?.description}
+          </p>
+        </div>
+        <div className="w-2.5 h-2.5 bg-[#ccd5ae] rounded-full" />
+      </div>
 
       {/* Logout button at bottom */}
       <div className="pt-5 border-t border-neutral-100 md:px-3.5 md:pb-4">

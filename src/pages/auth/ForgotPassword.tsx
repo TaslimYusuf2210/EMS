@@ -6,6 +6,7 @@ import workTimeSvg from '../../assets/work_time.svg';
 import { Hourglass } from 'ldrs/react'
 import 'ldrs/react/Hourglass.css'
 import { useForgotPassword } from '../../hooks/useMutation/useForgotPassword';
+import { AuthInput } from './components/AuthInput';
 
 const forgotSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
@@ -78,14 +79,14 @@ export default function ForgotPassword() {
               </div>
               <Link
                 to="/reset-password"
-                className="block w-full text-center py-3 bg-[#ccd5ae] hover:bg-[#faedcd] text-neutral-950 font-bold rounded-xl transition-all text-sm"
+                className="btn-brand block w-full text-center py-3 text-sm"
               >
                 Reset Password
               </Link>
               <div className="text-center">
                 <Link
                   to="/login"
-                  className="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+                  className="text-sm text-brand-deep hover:text-brand font-medium transition-colors"
                 >
                   ← Back to Login
                 </Link>
@@ -93,36 +94,20 @@ export default function ForgotPassword() {
             </div>
           ) : (
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-              <div className="relative group">
-                <input
-                  type="email"
-                  id="email"
-                  placeholder=""
-                  {...register('email')}
-                  className={`peer w-full py-3 px-4 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
-                    errors.email
-                      ? 'border-red-400 focus:border-red-500'
-                      : 'border-slate-200 focus:border-indigo-600'
-                  }`}
-                />
-                <label
-                  htmlFor="email"
-                  className="absolute left-4 -top-2.5 text-xs text-slate-500 transition-all duration-200 peer-placeholder-shown:text-base peer-placeholder-shown:text-slate-400 peer-placeholder-shown:top-3 peer-focus:-top-2.5 peer-focus:text-xs peer-focus:text-indigo-600"
-                >
-                  Email Address
-                </label>
-                {errors.email && (
-                  <p className="text-red-500 text-xs mt-1 font-medium">{errors.email.message}</p>
-                )}
-              </div>
+              <AuthInput
+                type="email"
+                label="Email Address"
+                error={errors.email?.message}
+                {...register('email')}
+              />
 
               <button
                 type="submit"
                 disabled={isPending}
-                className="w-full py-3 bg-[#ccd5ae] hover:bg-[#faedcd] text-neutral-950 font-bold rounded-xl transition-all text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="btn-brand w-full py-3 text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
               >
                 {isPending ? (
-                  <><Hourglass size={16} /> Sending...</>
+                  <><Hourglass size={16} color="white" /> Sending...</>
                 ) : (
                   'Send Reset Link'
                 )}
@@ -131,7 +116,7 @@ export default function ForgotPassword() {
               <div className="text-center">
                 <Link
                   to="/login"
-                  className="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors"
+                  className="text-sm text-brand-deep hover:text-brand font-medium transition-colors"
                 >
                   ← Back to Login
                 </Link>

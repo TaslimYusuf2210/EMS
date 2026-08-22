@@ -7,6 +7,7 @@ import workTimeSvg from '../../assets/work_time.svg';
 import { Hourglass } from 'ldrs/react'
 import 'ldrs/react/Hourglass.css'
 import { useResetPassword } from '../../hooks/useMutation/useResetPassword';
+import { AuthInput } from './components/AuthInput';
 
 const resetSchema = z.object({
   email: z.string().email({ message: 'Please enter a valid email address' }),
@@ -100,7 +101,7 @@ export default function ResetPassword() {
               </div>
               <button
                 onClick={() => navigate('/login')}
-                className="w-full py-3 bg-[#ccd5ae] hover:bg-[#faedcd] text-neutral-950 font-bold rounded-xl transition-all text-sm cursor-pointer"
+                className="btn-brand w-full py-3 text-sm cursor-pointer"
               >
                 Go to Login
               </button>
@@ -108,92 +109,56 @@ export default function ResetPassword() {
           ) : (
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
               {/* Email */}
-              <div className="relative group">
-                <input
-                  type="email"
-                  id="email"
-                  readOnly
-                  placeholder=""
-                  {...register('email')}
-                  className="w-full py-3 px-4 border-b-2 text-slate-500 bg-transparent cursor-not-allowed border-slate-100 focus:outline-none"
-                />
-                <label htmlFor="email" className="absolute left-4 -top-2.5 text-xs text-slate-400 transition-all duration-200">
-                  Email Address
-                </label>
-              </div>
+              <AuthInput
+                type="email"
+                label="Email Address"
+                readOnly
+                className="auth-input-muted"
+                {...register('email')}
+              />
 
               {/* OTP */}
-              <div className="relative group">
-                <input
-                  type="text"
-                  id="otp"
-                  placeholder=""
-                  {...register('otp')}
-                  className={`w-full py-3 px-4 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
-                    errors.otp ? 'border-red-400 focus:border-red-500' : 'border-slate-200 focus:border-indigo-600'
-                  }`}
-                />
-                <label htmlFor="otp" className="absolute left-4 -top-2.5 text-xs text-slate-500 transition-all duration-200">
-                  OTP Code
-                </label>
-                {errors.otp && <p className="text-red-500 text-xs mt-1 font-medium">{errors.otp.message}</p>}
-              </div>
+              <AuthInput
+                type="text"
+                label="OTP Code"
+                error={errors.otp?.message}
+                {...register('otp')}
+              />
 
               {/* New Password */}
-              <div className="relative group">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="newPassword"
-                  placeholder=""
-                  {...register('newPassword')}
-                  className={`w-full py-3 px-10 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
-                    errors.newPassword ? 'border-red-400 focus:border-red-500' : 'border-slate-200 focus:border-indigo-600'
-                  }`}
-                />
-                <label htmlFor="newPassword" className="absolute left-4 -top-2.5 text-xs text-slate-500 transition-all duration-200">
-                  New Password
-                </label>
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 cursor-pointer"
-                >
-                  {showPassword ? (
+              <AuthInput
+                type={showPassword ? 'text' : 'password'}
+                label="New Password"
+                error={errors.newPassword?.message}
+                trailing={
+                  showPassword ? (
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
                   ) : (
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                  )}
-                </button>
-                {errors.newPassword && <p className="text-red-500 text-xs mt-1 font-medium">{errors.newPassword.message}</p>}
-              </div>
+                  )
+                }
+                trailingAction={() => setShowPassword(!showPassword)}
+                {...register('newPassword')}
+              />
 
               {/* Confirm Password */}
-              <div className="relative group">
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  id="confirmPassword"
-                  placeholder=""
-                  {...register('confirmPassword')}
-                  className={`w-full py-3 px-4 border-b-2 text-slate-800 placeholder-transparent focus:outline-none transition-all duration-200 ${
-                    errors.confirmPassword ? 'border-red-400 focus:border-red-500' : 'border-slate-200 focus:border-indigo-600'
-                  }`}
-                />
-                <label htmlFor="confirmPassword" className="absolute left-4 -top-2.5 text-xs text-slate-500 transition-all duration-200">
-                  Confirm New Password
-                </label>
-                {errors.confirmPassword && <p className="text-red-500 text-xs mt-1 font-medium">{errors.confirmPassword.message}</p>}
-              </div>
+              <AuthInput
+                type={showPassword ? 'text' : 'password'}
+                label="Confirm New Password"
+                error={errors.confirmPassword?.message}
+                {...register('confirmPassword')}
+              />
 
               <button
                 type="submit"
                 disabled={isPending}
-                className="w-full py-3 bg-[#ccd5ae] hover:bg-[#faedcd] text-neutral-950 font-bold rounded-xl transition-all text-sm cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                className="btn-brand w-full py-3 text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 cursor-pointer"
               >
-                {isPending ? <><Hourglass size={16} /> Resetting...</> : 'Reset Password'}
+                {isPending ? <><Hourglass size={16} color="white" /> Resetting...</> : 'Reset Password'}
               </button>
 
               <div className="text-center">
-                <Link to="/login" className="text-sm text-indigo-600 hover:text-indigo-800 font-medium transition-colors">
+                <Link to="/login" className="text-sm text-brand-deep hover:text-brand font-medium transition-colors">
                   ← Back to Login
                 </Link>
               </div>

@@ -53,7 +53,7 @@ export function SuccessStep() {
       <div style={{ animation: 'floatUp 0.5s ease-out 0.6s both' }} className="mt-6">
         <Link
           to="/login"
-          className="inline-block px-6 py-2.5 bg-[#faedcd] hover:bg-[#ccd5ae] text-neutral-950 font-bold rounded-xl shadow-lg shadow-indigo-100 hover:shadow-indigo-200 active:scale-[0.98] transition-all duration-150"
+          className="btn-brand inline-block px-6 py-2.5"
         >
           Login to your dashboard →
         </Link>
